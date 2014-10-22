@@ -21,8 +21,5 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-<<<<<<< HEAD
     compile 'com.android.support:appcompat-v7:21.0.0'
-=======
->>>>>>> parent of 2920d7f... LoginActivity Created
 }
