@@ -17,8 +17,8 @@ public class MainActivity extends Activity {
     private Button loginBtn;
     private EditText etUser, etPassword;
     private TextView tvLoginStatus;
-    int user = 1337;
-    String password = "password";
+    int user = 1;
+    String password = "p";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +61,8 @@ public class MainActivity extends Activity {
                 if (user == etUserint && password.equals(etPassword.getText().toString())) {
                     tvLoginStatus.setText("Login Succes");
                     Intent switchtoregister = new Intent(v.getContext(), MainWindow.class);
-                    startActivityForResult(switchtoregister, 0);
+                    startActivity(switchtoregister);
+                    finish();
                 }
                 else{
                     tvLoginStatus.setText("Fail");
