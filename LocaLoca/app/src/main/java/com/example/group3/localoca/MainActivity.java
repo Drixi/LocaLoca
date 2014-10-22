@@ -1,6 +1,7 @@
 package com.example.group3.localoca;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,6 +60,8 @@ public class MainActivity extends Activity {
 
                 if (user == etUserint && password.equals(etPassword.getText().toString())) {
                     tvLoginStatus.setText("Login Succes");
+                    Intent switchtoregister = new Intent(v.getContext(), MainWindow.class);
+                    startActivityForResult(switchtoregister, 0);
                 }
                 else{
                     tvLoginStatus.setText("Fail");
