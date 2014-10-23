@@ -36,15 +36,21 @@
         android:id="@+id/etUser"
         android:hint="Email Address"
         android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:maxLines="1"
+        android:singleLine="true" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
         android:id="@+id/etPassword"
+        android:imeOptions="actionUnspecified"
+        android:inputType="textPassword"
         android:layout_below="@+id/etUser"
-        android:layout_centerHorizontal="true" "/>
+        android:layout_centerHorizontal="true"
+        android:maxLines="1"
+        android:singleLine="true" />
 
     <TextView
         android:layout_width="wrap_content"
