@@ -44,7 +44,7 @@
         android:hint="Password"
         android:id="@+id/etPassword"
         android:layout_below="@+id/etUser"
-        android:layout_centerHorizontal="true" "/>
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -34,12 +34,8 @@ public class MainMenu extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD:LocaLoca/app/src/main/java/com/example/group3/localoca/MainMenu.java
         setContentView(R.layout.activity_main_menu);
-=======
-        setContentView(R.layout.activity_main_window);
         lvFloors = (ListView)findViewById(R.id.lvBuildings);
->>>>>>> origin/master:LocaLoca/app/src/main/java/com/example/group3/localoca/MainWindow.java
         img = (ImageView)findViewById(R.id.imgVFace);
         DownloadImage = (Button)findViewById(R.id.btnGetImage);
         DownloadImage.setOnClickListener(new View.OnClickListener() {
