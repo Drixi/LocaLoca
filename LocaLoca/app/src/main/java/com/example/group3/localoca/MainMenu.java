@@ -30,6 +30,7 @@ public class MainMenu extends Activity {
     ImageView img;
     Button DownloadImage;
     private ListView lvFloors;
+    List<String> FloorList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class MainMenu extends Activity {
     }
 
     public void lvPopulate() {
-        List<String> FloorList = new ArrayList<String>();
+
         FloorList.add("Frederikskaj 6");
         FloorList.add("Frederikskaj 10A");
         FloorList.add("Frederikskaj 10B");
@@ -117,6 +118,9 @@ public class MainMenu extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Object o = lvFloors.getItemAtPosition(position);
+                lvFloors.setAdapter(null);
+                FloorList.add("New List Item");
+                lvPopulate();
                 Toast.makeText(getBaseContext(), o.toString() + " " + id, Toast.LENGTH_SHORT).show();
             }
         });
