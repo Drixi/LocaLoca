@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -48,6 +49,9 @@ public class MainMenu extends Activity {
             }
         });
         lvPopulate();
+        lvClick();
+
+
     }
 
 
@@ -101,11 +105,24 @@ public class MainMenu extends Activity {
         List<String> FloorList = new ArrayList<String>();
         FloorList.add("Frederikskaj 6");
         FloorList.add("Frederikskaj 10A");
+        FloorList.add("Frederikskaj 10B");
+        FloorList.add("Frederikskaj 12");
+        FloorList.add("A.C. Meyer Vænge 15");
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1, FloorList );
 
         lvFloors.setAdapter(arrayAdapter);
+    }
+
+    public void lvClick(){
+        lvFloors.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Object o = lvFloors.getItemAtPosition(position);
+                Toast.makeText(getBaseContext(), o.toString() + " " + id, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
