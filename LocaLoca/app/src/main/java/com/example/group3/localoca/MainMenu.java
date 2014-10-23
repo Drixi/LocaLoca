@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 
-public class MainWindow extends Activity {
+public class MainMenu extends Activity {
 
     Bitmap bitmap;
     ProgressDialog pDialog;
@@ -26,7 +26,7 @@ public class MainWindow extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_window);
+        setContentView(R.layout.activity_main_menu);
         img = (ImageView)findViewById(R.id.imgVFace);
         DownloadImage = (Button)findViewById(R.id.btnGetImage);
         DownloadImage.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +61,7 @@ public class MainWindow extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(MainWindow.this);
+            pDialog = new ProgressDialog(MainMenu.this);
             pDialog.setMessage("Loading Image ....");
             pDialog.show();
         }
@@ -79,7 +79,7 @@ public class MainWindow extends Activity {
                 pDialog.dismiss();
             }else{
                 pDialog.dismiss();
-                Toast.makeText(MainWindow.this, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainMenu.this, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
             }
         }
     }

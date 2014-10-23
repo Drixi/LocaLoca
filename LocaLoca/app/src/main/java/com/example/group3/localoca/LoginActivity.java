@@ -10,10 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.Arrays;
 
-
-public class MainActivity extends Activity {
+public class LoginActivity extends Activity {
     private Button loginBtn;
     private EditText etUser, etPassword;
     private TextView tvLoginStatus;
@@ -22,15 +20,13 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         loginBtn = (Button)findViewById(R.id.btnLogin);
         etUser = (EditText)findViewById(R.id.etUser);
         etPassword = (EditText)findViewById(R.id.etPassword);
         tvLoginStatus = (TextView)findViewById(R.id.tvLoginStatus);
         btnPressed();
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,7 +56,7 @@ public class MainActivity extends Activity {
 
                 if (user == etUserint && password.equals(etPassword.getText().toString())) {
                     tvLoginStatus.setText("Login Succes");
-                    Intent switchtoregister = new Intent(v.getContext(), MainWindow.class);
+                    Intent switchtoregister = new Intent(v.getContext(), MainMenu.class);
                     startActivity(switchtoregister);
                     finish();
                 }
