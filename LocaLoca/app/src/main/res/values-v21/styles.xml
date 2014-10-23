@@ -2,4 +2,10 @@
 <resources>
     <style name="AppTheme" parent="android:Theme.Material.Light">
     </style>
+    <style name="shadowed_button">
+        <item name="android:shadowColor">#444444</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">9</item>
+    </style>
 </resources>

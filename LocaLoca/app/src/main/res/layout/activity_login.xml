@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/login_bg"
+    android:background="@drawable/login_bg2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -11,8 +11,10 @@
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:text="Login"
+        android:textSize="20dp"
+        android:textColor="#FFFFFF"
         android:id="@+id/btnLogin"
         android:background="#3acfcfcf"
         android:layout_marginTop="30dp"
@@ -21,12 +23,14 @@
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:text="Forgot Password?"
-        android:textSize="12dp"
+        android:textSize="17dp"
+        android:textColor="#FFFFFF"
         android:id="@+id/btnforgot"
         android:background="#3acfcfcf"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/btnLogin" />
 
@@ -48,13 +52,9 @@
         android:imeOptions="actionUnspecified"
         android:inputType="textPassword"
         android:layout_below="@+id/etUser"
-<<<<<<< HEAD
         android:layout_centerHorizontal="true"
         android:maxLines="1"
         android:singleLine="true" />
-=======
-        android:layout_centerHorizontal="true"/>
->>>>>>> origin/master
 
     <TextView
         android:layout_width="wrap_content"
