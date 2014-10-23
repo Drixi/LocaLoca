@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,7 +31,12 @@ public class MainMenu extends Activity {
     ImageView img;
     Button DownloadImage;
     private ListView lvFloors;
+    boolean buildingChosen;
+    long itemIDbuilding = 0;
+    long itemIDfloor = 0;
     List<String> FloorList = new ArrayList<String>();
+    String[] fk61st = {"203","203A","203B","203C","203D","203E","204","205",
+            "207","208","209","210","211","212","213","214","215","216","217","218","219","220"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +48,11 @@ public class MainMenu extends Activity {
         DownloadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                new LoadImage().execute("http://ampitere.eu/nurses/1.jpg");
+                //new LoadImage().execute("http://ampitere.eu/nurses/1.jpg");
+                FloorList.clear();
+                lvPopulate();
+                itemIDfloor = 0;
+                itemIDbuilding = 0;
             }
         });
         lvPopulate();
@@ -98,19 +108,21 @@ public class MainMenu extends Activity {
         }
     }
 
-    public void lvPopulate() {
+    private void arrayadapter(){
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1, FloorList );
+        lvFloors.setAdapter(null);
+        lvFloors.setAdapter(arrayAdapter);
+    }
 
+    public void lvPopulate() {
         FloorList.add("Frederikskaj 6");
         FloorList.add("Frederikskaj 10A");
         FloorList.add("Frederikskaj 10B");
         FloorList.add("Frederikskaj 12");
         FloorList.add("A.C. Meyer Vænge 15");
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1, FloorList );
-
-        lvFloors.setAdapter(arrayAdapter);
+        arrayadapter();
     }
 
     public void lvClick(){
@@ -118,11 +130,37 @@ public class MainMenu extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Object o = lvFloors.getItemAtPosition(position);
-                lvFloors.setAdapter(null);
-                FloorList.add("New List Item");
-                lvPopulate();
-                Toast.makeText(getBaseContext(), o.toString() + " " + id, Toast.LENGTH_SHORT).show();
+                FloorList.clear();
+                if(itemIDbuilding != 0){
+                    itemIDfloor = id;
+                    lvRoomsPopulate();
+                }
+                if(itemIDbuilding == 0) {
+                    itemIDbuilding = id;
+                    lvFloorsPopulate();
+                }
+
+                Toast.makeText(getBaseContext(), o.toString() + " " + itemIDbuilding + " " + itemIDfloor, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    private void lvFloorsPopulate(){
+        FloorList.add("Ground Floor");
+        FloorList.add("1st Floor");
+        FloorList.add("2nd Floor");
+        FloorList.add("3rd Floor");
+        if(itemIDbuilding == 4 || itemIDbuilding == 5) {
+            FloorList.add("4rd Floor");
+        }
+        arrayadapter();
+    }
+
+    private void lvRoomsPopulate(){
+        for(int i = 0; i<fk61st.length; i++){
+            FloorList.add(fk61st[i]);
+        }
+        arrayadapter();
+    }
+
 }
