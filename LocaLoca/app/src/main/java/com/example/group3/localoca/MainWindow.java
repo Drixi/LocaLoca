@@ -9,12 +9,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainWindow extends Activity {
@@ -23,10 +28,13 @@ public class MainWindow extends Activity {
     ProgressDialog pDialog;
     ImageView img;
     Button DownloadImage;
+    private ListView lvFloors;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_window);
+        lvFloors = (ListView)findViewById(R.id.lvBuildings);
         img = (ImageView)findViewById(R.id.imgVFace);
         DownloadImage = (Button)findViewById(R.id.btnGetImage);
         DownloadImage.setOnClickListener(new View.OnClickListener() {
@@ -35,6 +43,7 @@ public class MainWindow extends Activity {
                 new LoadImage().execute("http://ampitere.eu/nurses/1.jpg");
             }
         });
+        lvPopulate();
     }
 
 
@@ -82,5 +91,17 @@ public class MainWindow extends Activity {
                 Toast.makeText(MainWindow.this, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void lvPopulate() {
+        List<String> FloorList = new ArrayList<String>();
+        FloorList.add("Frederikskaj 6");
+        FloorList.add("Frederikskaj 10A");
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1, FloorList );
+
+        lvFloors.setAdapter(arrayAdapter);
     }
 }
