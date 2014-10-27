@@ -19,6 +19,9 @@
             android:name=".MainMenu"
             android:label="@string/title_activity_main_window" >
         </activity>
+        <activity
+            android:name=".ITE_MainMenu" >
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
