@@ -88,7 +88,7 @@ public class LoginActivity extends Activity {
                     tvLoginStatus.setText("Login Succes");
                     Intent switchtoregister = new Intent(v.getContext(), MainMenu.class);
                     startActivity(switchtoregister);
-                    finish();
+                    finish(3);
                 }
                 else{
                     tvLoginStatus.setText("Fail");
@@ -122,7 +122,7 @@ public class LoginActivity extends Activity {
                                             Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                                         }
                                     });
-                                    startActivity(new Intent(LoginActivity.this, MainMenu.class));
+                                    startActivity(new Intent(LoginActivity.this, ITE_MainMenu.class));
                                     finish();
                                 }
                                 else{
