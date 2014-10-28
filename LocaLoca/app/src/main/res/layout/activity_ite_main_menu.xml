@@ -12,7 +12,7 @@
         android:id="@+id/img_menu_logo"
         android:layout_width="fill_parent"
         android:layout_height="180dp"
-        android:background="@drawable/logo_test2_sized_trans"/>
+        android:background="@drawable/logo_test"/>
 
     <Button
         android:id="@+id/btn_main1"
