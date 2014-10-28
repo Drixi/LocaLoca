@@ -16,7 +16,7 @@
 
     <Button
         android:id="@+id/btn_main1"
-        android:text="btn_main1"
+        android:text="Room List"
         android:layout_width="@dimen/main_btn_size"
         android:layout_height="@dimen/main_btn_size"
         android:layout_alignParentBottom="true"

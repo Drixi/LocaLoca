@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 /**
  * Created by michael on 10/27/2014.
@@ -59,6 +60,23 @@ public class ITE_MainMenu extends Activity {
             }
         });
 
+    }
+    public class XYZ extends Activity {
+        private long backPressedTime = 0;    // used by onBackPressed()
+
+
+        @Override
+        public void onBackPressed() {        // to prevent irritating accidental logouts
+            long t = System.currentTimeMillis();
+            if (t - backPressedTime > 2000) {    // 2 secs
+                backPressedTime = t;
+                Toast.makeText(this, "Press back again to logout",
+                        Toast.LENGTH_SHORT).show();
+            } else {    // this guy is serious
+                // clean up
+                super.onBackPressed();       // bye
+            }
+        }
     }
 
 }
