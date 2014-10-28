@@ -18,6 +18,7 @@ public class ITE_MainMenu extends Activity {
     private Button btn_main_2;
     private Button btn_main_3;
     private Button btn_main_4;
+    private Toast backtoast;
     ImageView logo;
 
     @Override
@@ -29,6 +30,7 @@ public class ITE_MainMenu extends Activity {
         btn_main_3 = (Button) findViewById(R.id.btn_main3);
         btn_main_4 = (Button) findViewById(R.id.btn_main4);
         logo = (ImageView) findViewById(R.id.img_menu_logo);
+
 
     // Bottom left button
         btn_main_1.setOnClickListener(new View.OnClickListener() {
@@ -61,22 +63,18 @@ public class ITE_MainMenu extends Activity {
         });
 
     }
-    public class XYZ extends Activity {
-        private long backPressedTime = 0;    // used by onBackPressed()
-
-
-        @Override
-        public void onBackPressed() {        // to prevent irritating accidental logouts
-            long t = System.currentTimeMillis();
-            if (t - backPressedTime > 2000) {    // 2 secs
-                backPressedTime = t;
-                Toast.makeText(this, "Press back again to logout",
-                        Toast.LENGTH_SHORT).show();
-            } else {    // this guy is serious
-                // clean up
-                super.onBackPressed();       // bye
+    public void onBackPressed() {
+        //if(USER_IS_GOING_TO_EXIT) {
+            if(backtoast!=null&&backtoast.getView().getWindowToken()!=null) {
+                finish();
+            } else {
+                backtoast = Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT);
+                backtoast.show();
             }
-        }
+       // } else {
+         //   //other stuff...
+           // super.onBackPressed();
+        //}
     }
 
 }
