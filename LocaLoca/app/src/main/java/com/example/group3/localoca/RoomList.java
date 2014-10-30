@@ -2,10 +2,13 @@ package com.example.group3.localoca;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +17,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -28,6 +34,7 @@ public class RoomList extends Activity {
     ProgressDialog pDialog;
     ImageView img;
     Button DownloadImage;
+    TextView tvTest;
     private ListView lvFloors;
     boolean buildingChosen;
     long itemIDbuilding = 0;
@@ -39,9 +46,10 @@ public class RoomList extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_RommList);
+        setContentView(R.layout.activity_RoomList);
         lvFloors = (ListView)findViewById(R.id.lvBuildings);
         img = (ImageView)findViewById(R.id.imgVFace);
+        tvTest = (TextView)findViewById(R.id.tvTest);
         DownloadImage = (Button)findViewById(R.id.btnGetImage);
         DownloadImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,10 +59,17 @@ public class RoomList extends Activity {
                 lvPopulate();
                 itemIDfloor = 0;
                 itemIDbuilding = 0;
+                if(displayGpsStatus()){
+                    tvTest.setText("GPS enabled");
+                }
+                else{
+                    tvTest.setText("GPS disabled");
+                }
             }
         });
         lvPopulate();
         lvClick();
+        displayGpsStatus();
 
 
     }
@@ -159,6 +174,20 @@ public class RoomList extends Activity {
             FloorList.add(fk61st[i]);
         }
         arrayadapter();
+    }
+
+    private Boolean displayGpsStatus() {
+        ContentResolver contentResolver = getBaseContext()
+                .getContentResolver();
+        boolean gpsStatus = Settings.Secure
+                .isLocationProviderEnabled(contentResolver,
+                        LocationManager.GPS_PROVIDER);
+        if (gpsStatus) {
+            return true;
+
+        } else {
+            return false;
+        }
     }
 
 }

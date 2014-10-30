@@ -12,14 +12,14 @@
         android:text="@string/hello_world"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:id="@+id/tvTest" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Download Image"
         android:id="@+id/btnGetImage"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/tvTest"
         android:layout_centerHorizontal="true" />
 
     <ImageView
@@ -27,8 +27,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/imgVFace"
         android:layout_below="@+id/btnGetImage"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView"
+        android:layout_toRightOf="@+id/tvTest"
+        android:layout_toEndOf="@+id/tvTest"
         android:layout_marginTop="48dp" />
 
     <ListView
