@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainMenu"
+            android:name=".RoomList"
             android:label="Room List" >
         </activity>
         <activity
