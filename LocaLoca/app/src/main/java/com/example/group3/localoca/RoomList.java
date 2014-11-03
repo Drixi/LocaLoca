@@ -20,8 +20,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,7 +44,7 @@ public class RoomList extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_RoomList);
+        setContentView(R.layout.activity_roomlist);
         lvFloors = (ListView)findViewById(R.id.lvBuildings);
         img = (ImageView)findViewById(R.id.imgVFace);
         tvTest = (TextView)findViewById(R.id.tvTest);
