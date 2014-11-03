@@ -24,7 +24,7 @@
             android:label="Main Menu">
         </activity>
     </application>
-
+    <service android:name=".LocationService" android:enabled="true"></service>
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />

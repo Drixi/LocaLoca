@@ -2,6 +2,8 @@ package com.example.group3.localoca;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -17,6 +19,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -272,7 +275,7 @@ public class RoomList extends Activity {
     }
 
     public void atauu(){
-
+    /*
         double latStart = 55.647387;
         double latStop = 55.651175;
         double longStart = 12.539902;
@@ -287,5 +290,20 @@ public class RoomList extends Activity {
         else{
             Toast.makeText(getBaseContext(), "You are not on AAU campus at the moment", Toast.LENGTH_SHORT).show();
         }
+        */
+
+        NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent intent = null;
+
+        intent = new Intent(this, RoomList.class);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.logo_direct).setAutoCancel(true)
+                .setContentIntent(contentIntent).setContentTitle(this.getString(R.string.app_name))
+                .setContentText("Welcome to AAU campus! Click to check your courses");
+
+        // mBuilder.setContentIntent(contentIntent);
+        mNotificationManager.notify((int) System.currentTimeMillis() % Integer.MAX_VALUE, mBuilder.build());
     }
 }
