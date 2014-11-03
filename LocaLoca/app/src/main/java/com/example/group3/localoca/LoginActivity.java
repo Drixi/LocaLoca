@@ -122,6 +122,8 @@ public class LoginActivity extends Activity {
                                             Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                                         }
                                     });
+                                    globalvalues globalvalues = new globalvalues();
+                                    globalvalues.logininfo = separated;
                                     startActivity(new Intent(LoginActivity.this, ITE_MainMenu.class));
                                     finish();
                                 }

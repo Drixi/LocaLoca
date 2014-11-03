@@ -62,28 +62,6 @@ public class RoomList extends Activity {
     private LocationListener locationListener=null;
     private static final String TAG = "Debug";
 
-    LocationService mService;
-    boolean mBound = false;
-
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get
-            // LocalService instance
-            LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
-
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +103,6 @@ public class RoomList extends Activity {
         lvClick();
         displayGpsStatus();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
