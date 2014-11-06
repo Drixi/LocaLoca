@@ -1,14 +1,29 @@
 package com.example.group3.localoca;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +35,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD
+=======
+import java.io.IOException;
+>>>>>>> origin/master
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class RoomList extends Activity {
@@ -31,24 +51,33 @@ public class RoomList extends Activity {
     Bitmap bitmap;
     ProgressDialog pDialog;
     ImageView img;
-    Button DownloadImage;
+    Button DownloadImage, btnCheckLocation;
     TextView tvTest;
     private ListView lvFloors;
     boolean buildingChosen;
     long itemIDbuilding = 0;
     long itemIDfloor = 0;
+    Double longitude, latitude;
     List<String> FloorList = new ArrayList<String>();
     String[] fk61st = {"203","203A","203B","203C","203D","203E","204","205",
             "207","208","209","210","211","212","213","214","215","216","217","218","219","220"};
+    private LocationManager locationManager=null;
+    private LocationListener locationListener=null;
+    private static final String TAG = "Debug";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roomlist);
+<<<<<<< HEAD
+=======
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+>>>>>>> origin/master
         lvFloors = (ListView)findViewById(R.id.lvBuildings);
         img = (ImageView)findViewById(R.id.imgVFace);
         tvTest = (TextView)findViewById(R.id.tvTest);
         DownloadImage = (Button)findViewById(R.id.btnGetImage);
+        btnCheckLocation = (Button)findViewById(R.id.btnLocationCheck);
         DownloadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -59,19 +88,27 @@ public class RoomList extends Activity {
                 itemIDbuilding = 0;
                 if(displayGpsStatus()){
                     tvTest.setText("GPS enabled");
+                    locationListener = new MyLocationListener();
+
+                    locationManager.requestLocationUpdates(LocationManager
+                            .GPS_PROVIDER, 5000, 10,locationListener);
+
                 }
                 else{
-                    tvTest.setText("GPS disabled");
+                    alertbox();
                 }
+            }
+        });
+        btnCheckLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                atauu();
             }
         });
         lvPopulate();
         lvClick();
         displayGpsStatus();
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -188,4 +225,93 @@ public class RoomList extends Activity {
         }
     }
 
+    protected void alertbox() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your Device's GPS is Disabled")
+                .setCancelable(false)
+                .setTitle("GPS Status")
+                .setPositiveButton("Activate GPS",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // finish the current activity
+                                // AlertBoxAdvance.this.finish();
+                                Intent myIntent = new Intent(
+                                        //Settings.ACTION_SECURITY_SETTINGS);
+                                        Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(myIntent);
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // cancel the dialog box
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private class MyLocationListener implements LocationListener {
+        @Override
+        public void onLocationChanged(Location loc) {
+            longitude = loc.getLongitude();
+            Log.v(TAG, longitude.toString());
+            latitude = loc.getLatitude();
+            Log.v(TAG, latitude.toString());
+
+            String s = "Longitude: " + longitude+"\n"+  "Latitude: " + latitude;
+            tvTest.setText(s);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onStatusChanged(String provider,
+                                    int status, Bundle extras) {
+            // TODO Auto-generated method stub
+        }
+    }
+
+    public void atauu(){
+    /*
+        double latStart = 55.647387;
+        double latStop = 55.651175;
+        double longStart = 12.539902;
+        double longStop = 12.544216;
+        System.out.println(latitude>latStart);
+        System.out.println(latitude<latStop);
+        System.out.println(longitude>longStart);
+        System.out.println(longitude<latStop);
+        if(latitude>latStart && latitude<latStop && longitude>longStart && longitude<latStop){
+            Toast.makeText(getBaseContext(), "You are on AAU campus, Welcome", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getBaseContext(), "You are not on AAU campus at the moment", Toast.LENGTH_SHORT).show();
+        }
+        */
+
+        NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent intent = null;
+
+        intent = new Intent(this, RoomList.class);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.locaicon).setAutoCancel(true)
+                .setContentIntent(contentIntent).setContentTitle(this.getString(R.string.app_name))
+                .setContentText("Welcome to AAU campus! Click to check your courses");
+
+        // mBuilder.setContentIntent(contentIntent);
+        mNotificationManager.notify((int) System.currentTimeMillis() % Integer.MAX_VALUE, mBuilder.build());
+    }
 }

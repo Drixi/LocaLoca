@@ -20,7 +20,8 @@
         android:text="Download Image"
         android:id="@+id/btnGetImage"
         android:layout_below="@+id/tvTest"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -38,5 +39,14 @@
         android:layout_below="@+id/btnGetImage"
         android:layout_centerHorizontal="true"
         android:longClickable="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check if on AAU campus"
+        android:id="@+id/btnLocationCheck"
+        android:layout_alignBottom="@+id/btnGetImage"
+        android:layout_toRightOf="@+id/btnGetImage"
+        android:layout_toEndOf="@+id/btnGetImage" />
 
 </RelativeLayout>
