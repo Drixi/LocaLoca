@@ -63,9 +63,7 @@
             android:background="@color/Btn_main"/></LinearLayout>
 
 </LinearLayout>
-=======
-        android:background="@drawable/logo_direct"/>
-
+    <RelativeLayout>
     <Button
         android:id="@+id/btn_main1"
         android:layout_width="@dimen/main_btn_size"
