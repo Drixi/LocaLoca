@@ -27,7 +27,6 @@
             android:theme="@style/AppTheme">
             android:label="Main Menu">
         </activity>
-
         <activity
             android:name=".CalenderActivity"
             android:label="Calender">

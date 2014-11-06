@@ -109,6 +109,7 @@ public class LoginActivity extends Activity {
                                     editor.putString("userAddress", separated[9]);
                                     editor.putString("userPosition", separated[10]);
                                     editor.putString("userCourses", separated[11]);
+                                    editor.putString("userBookings", separated[12]);
                                     editor.commit();
                                     runOnUiThread(new Runnable() {
                                         public void run() {
