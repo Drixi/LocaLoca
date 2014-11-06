@@ -16,34 +16,34 @@
 
     <Button
         android:id="@+id/btn_main1"
-        android:text="Room List"
         android:layout_width="@dimen/main_btn_size"
         android:layout_height="@dimen/main_btn_size"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/mapslogo"/>
 
     <Button
         android:id="@+id/btn_main2"
-        android:text="btn_main2"
         android:layout_width="@dimen/main_btn_size"
         android:layout_height="@dimen/main_btn_size"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:background="@drawable/booklogo"/>
 
     <Button
         android:id="@+id/btn_main3"
-        android:text="btn_main3"
         android:layout_width="@dimen/main_btn_size"
         android:layout_height="@dimen/main_btn_size"
         android:layout_above="@+id/btn_main1"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/search_icon"/>
 
     <Button
         android:id="@+id/btn_main4"
-        android:text="btn_main4"
         android:layout_width="@dimen/main_btn_size"
         android:layout_height="@dimen/main_btn_size"
         android:layout_above="@+id/btn_main2"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:background="@drawable/calendarlogo"/>
 
 </RelativeLayout>
