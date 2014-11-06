@@ -34,11 +34,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-<<<<<<< HEAD
-=======
 import java.io.IOException;
->>>>>>> origin/master
+import org.w3c.dom.Text;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -69,10 +66,8 @@ public class RoomList extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roomlist);
-<<<<<<< HEAD
-=======
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
->>>>>>> origin/master
+        setContentView(R.layout.activity_RoomList);
         lvFloors = (ListView)findViewById(R.id.lvBuildings);
         img = (ImageView)findViewById(R.id.imgVFace);
         tvTest = (TextView)findViewById(R.id.tvTest);
