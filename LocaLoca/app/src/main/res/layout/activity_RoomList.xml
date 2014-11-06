@@ -12,14 +12,14 @@
         android:text="@string/hello_world"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvTest" />
+        android:id="@+id/tvDay1" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Download Image"
         android:id="@+id/btnGetImage"
-        android:layout_below="@+id/tvTest"
+        android:layout_below="@+id/tvDay1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/imgVFace"
         android:layout_below="@+id/btnGetImage"
-        android:layout_toRightOf="@+id/tvTest"
-        android:layout_toEndOf="@+id/tvTest"
+        android:layout_toRightOf="@+id/tvDay1"
+        android:layout_toEndOf="@+id/tvDay1"
         android:layout_marginTop="48dp" />
 
     <ListView
