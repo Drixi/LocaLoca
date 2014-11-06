@@ -29,15 +29,15 @@ public class CalenderActivity extends Activity {
         String userid = userinfo.getString("userID", "");
         String test = userinfo.getString("userName", "");
         //tvTest.setText("User ID = " + userid + " name = " + test);
-        tvTest.setText(getDateString(0));
+        //tvTest.setText(getDateString(0));
         tvTest2.setText(getDateString(1) + " " + getDateString(2));
     }
 
     private String getDateString(int days) {
         DateFormat dateFormat = new SimpleDateFormat("EEEE - dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_WEEK, days);
-        cal.add(Calendar.DATE, days);
+        cal.add(Calendar.DAY_OF_WEEK, -days);
+        cal.add(Calendar.DATE, -days);
         return dateFormat.format(cal.getTime());
     }
 
