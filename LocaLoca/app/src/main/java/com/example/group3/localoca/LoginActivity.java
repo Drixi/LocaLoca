@@ -34,9 +34,6 @@ import java.util.List;
 public class LoginActivity extends Activity {
     private Button loginBtn;
     private EditText etUser, etPassword;
-    private TextView tvLoginStatus;
-    int user = 1;
-    String password = "p";
     HttpPost httppost;
     StringBuffer buffer;
     String response;
@@ -45,7 +42,8 @@ public class LoginActivity extends Activity {
     ProgressDialog dialog = null;
     static String[] separated;
     ArrayList<String> list = new ArrayList<String>();
-    SharedPreferences SM;
+    SharedPreferences userinfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +52,6 @@ public class LoginActivity extends Activity {
         loginBtn = (Button)findViewById(R.id.btnLogin);
         etUser = (EditText)findViewById(R.id.etUser);
         etPassword = (EditText)findViewById(R.id.etPassword);
-        tvLoginStatus = (TextView)findViewById(R.id.tvLoginStatus);
         btnPressed();
     }
 
@@ -81,18 +78,6 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-/*                String etUserString = etUser.getText().toString();
-                int etUserint = Integer.valueOf(etUserString);
-
-                if (user == etUserint && password.equals(etPassword.getText().toString())) {
-                    tvLoginStatus.setText("Login Succes");
-                    Intent switchtoregister = new Intent(v.getContext(), MainMenu.class);
-                    startActivity(switchtoregister);
-                    finish(3);
-                }
-                else{
-                    tvLoginStatus.setText("Fail");
-                }*/
 
                 if(etUser.getText().length() > 0 && etPassword.getText().length() > 0){
                     dialog = ProgressDialog.show(LoginActivity.this, "",
@@ -109,21 +94,27 @@ public class LoginActivity extends Activity {
                             if(separated[2].length() > 0){
                                 dialog.dismiss();
                                 String pinString = etPassword.getText().toString();
-                                //int pinInteger = Integer.valueOf(pinString);
-                                //int responseInteger = Integer.valueOf(separated[3]);
-                                SM = getSharedPreferences("userrecord", 0);
-                                Boolean islogin = SM.getBoolean("userlogin", false);
+
                                 if(pinString.equals(separated[3])){
-                                    SharedPreferences.Editor edit = SM.edit();
-                                    edit.putBoolean("userlogin", true);
-                                    edit.commit();
+                                    userinfo = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = userinfo.edit();
+                                    editor.putString("userID", separated[1]);
+                                    editor.putString("userEmail", separated[2]);
+                                    editor.putString("userPassword", separated[3]);
+                                    editor.putString("userPin", separated[4]);
+                                    editor.putString("userNumber", separated[5]);
+                                    editor.putString("userLevel", separated[6]);
+                                    editor.putString("userName", separated[7]);
+                                    editor.putString("userAge", separated[8]);
+                                    editor.putString("userAddress", separated[9]);
+                                    editor.putString("userPosition", separated[10]);
+                                    editor.putString("userCourses", separated[11]);
+                                    editor.commit();
                                     runOnUiThread(new Runnable() {
                                         public void run() {
                                             Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                                         }
                                     });
-                                    globalvalues globalvalues = new globalvalues();
-                                    globalvalues.logininfo = separated;
                                     startActivity(new Intent(LoginActivity.this, ITE_MainMenu.class));
                                     finish();
                                 }
@@ -161,6 +152,7 @@ public class LoginActivity extends Activity {
             separated = response.split("#");
             for (int i = 0; i < separated.length; ++i) {
                 list.add(separated[i]);}
+
 
 
         }catch(IOException e){
