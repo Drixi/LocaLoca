@@ -67,7 +67,7 @@ public class RoomList extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roomlist);
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        setContentView(R.layout.activity_RoomList);
+        setContentView(R.layout.activity_roomlist);
         lvFloors = (ListView)findViewById(R.id.lvBuildings);
         img = (ImageView)findViewById(R.id.imgVFace);
         tvTest = (TextView)findViewById(R.id.tvTest);

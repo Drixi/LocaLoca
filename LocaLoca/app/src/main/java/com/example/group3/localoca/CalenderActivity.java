@@ -36,7 +36,6 @@ public class CalenderActivity extends Activity {
     private String getDateString(int days) {
         DateFormat dateFormat = new SimpleDateFormat("EEEE - dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_WEEK, days);
         cal.add(Calendar.DATE, days);
         return dateFormat.format(cal.getTime());
     }
