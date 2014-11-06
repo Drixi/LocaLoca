@@ -9,6 +9,7 @@
         android:theme="@android:style/Theme.Holo" >
         <activity
             android:name=".LoginActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:label="DirecT" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,10 +19,12 @@
         </activity>
         <activity
             android:name=".RoomList"
+            android:theme="@style/AppTheme">
             android:label="Room List" >
         </activity>
         <activity
             android:name=".ITE_MainMenu"
+            android:theme="@style/AppTheme">
             android:label="Main Menu">
         </activity>
 

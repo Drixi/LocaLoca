@@ -65,7 +65,7 @@ public class RoomList extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_roomlist);
+        setContentView(R.layout.activity_RoomList);
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         setContentView(R.layout.activity_roomlist);
         lvFloors = (ListView)findViewById(R.id.lvBuildings);
