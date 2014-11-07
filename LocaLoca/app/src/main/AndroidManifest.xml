@@ -31,6 +31,10 @@
             android:name=".CalenderActivity"
             android:label="Calender">
         </activity>
+        <activity
+            android:name=".BookingActivity"
+            android:label="Booking">
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

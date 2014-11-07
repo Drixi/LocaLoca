@@ -44,7 +44,8 @@ public class ITE_MainMenu extends Activity {
         btn_main_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // CONTENT HERE //
+                Intent switchtoregister = new Intent(v.getContext(), BookingActivity.class);
+                startActivity(switchtoregister);
             }
         });
     // Top left button
