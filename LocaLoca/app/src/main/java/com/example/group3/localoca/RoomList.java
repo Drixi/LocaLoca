@@ -5,22 +5,17 @@ import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -35,12 +30,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class RoomList extends Activity {
@@ -62,28 +55,6 @@ public class RoomList extends Activity {
     private LocationListener locationListener=null;
     private static final String TAG = "Debug";
 
-    LocationService mService;
-    boolean mBound = false;
-
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get
-            // LocalService instance
-            LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
-
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +62,7 @@ public class RoomList extends Activity {
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         lvFloors = (ListView)findViewById(R.id.lvBuildings);
         img = (ImageView)findViewById(R.id.imgVFace);
-        tvTest = (TextView)findViewById(R.id.tvTest);
+        tvTest = (TextView)findViewById(R.id.tvDay1);
         DownloadImage = (Button)findViewById(R.id.btnGetImage);
         btnCheckLocation = (Button)findViewById(R.id.btnLocationCheck);
         DownloadImage.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +96,6 @@ public class RoomList extends Activity {
         lvClick();
         displayGpsStatus();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

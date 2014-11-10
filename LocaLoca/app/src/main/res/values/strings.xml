@@ -5,5 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main_window">MainWindow</string>
+    <color name="App_BG">#ff000000</color>
+    <color name="Btn_main">#7D7D7D</color>
 
 </resources>
