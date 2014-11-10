@@ -15,45 +15,7 @@
         android:id="@+id/img_menu_logo"
         android:layout_width="fill_parent"
         android:layout_height="180dp"
-<<<<<<< HEAD
         android:background="@drawable/logo_direct"/>
-
-    <Button
-        android:id="@+id/btn_main1"
-        android:text="Room List"
-        android:layout_width="@dimen/main_btn_size"
-        android:layout_height="@dimen/main_btn_size"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"/>
-
-    <Button
-        android:id="@+id/btn_main2"
-        android:layout_width="@dimen/main_btn_size"
-        android:layout_height="@dimen/main_btn_size"
-        android:background="@drawable/map_icon"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
-
-    <Button
-        android:id="@+id/btn_main3"
-        android:layout_width="@dimen/main_btn_size"
-        android:layout_height="@dimen/main_btn_size"
-        android:background="@drawable/calendar_icon"
-        android:layout_above="@+id/btn_main1"
-        android:layout_alignParentLeft="true"/>
-
-    <Button
-        android:id="@+id/btn_main4"
-        android:layout_width="@dimen/main_btn_size"
-        android:layout_height="@dimen/main_btn_size"
-        android:background="@drawable/search_red"
-        android:layout_above="@+id/btn_main2"
-        android:layout_alignParentRight="true"/>
-
-</RelativeLayout>
-=======
-        android:background="@drawable/logo_direct"
-        android:layout_marginBottom="10dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -81,7 +43,8 @@
             android:layout_marginTop="@dimen/button_margin"
             android:layout_marginLeft="@dimen/button_margin"
             android:layout_weight="1"
-            android:background="@drawable/booklogo"/></LinearLayout>
+            android:background="@drawable/booklogo"/>
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -109,7 +72,7 @@
             android:layout_marginTop="@dimen/button_margin"
             android:layout_marginLeft="@dimen/button_margin"
             android:layout_weight="1"
-            android:background="@drawable/calendarlogo"/></LinearLayout>
+            android:background="@drawable/calendarlogo"/>
+    </LinearLayout>
 
 </LinearLayout>
->>>>>>> origin/master
