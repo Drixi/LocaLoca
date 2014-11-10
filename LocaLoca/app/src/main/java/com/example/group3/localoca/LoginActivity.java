@@ -91,40 +91,44 @@ public class LoginActivity extends Activity {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if(separated[2].length() > 0){
-                                dialog.dismiss();
-                                String pinString = etPassword.getText().toString();
+                            if(separated != null) {
+                                if (separated[2].length() > 0) {
+                                    dialog.dismiss();
+                                    String pinString = etPassword.getText().toString();
 
-                                if(pinString.equals(separated[3])){
-                                    userinfo = getSharedPreferences("userinfo", MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = userinfo.edit();
-                                    editor.putString("userID", separated[1]);
-                                    editor.putString("userEmail", separated[2]);
-                                    editor.putString("userPassword", separated[3]);
-                                    editor.putString("userPin", separated[4]);
-                                    editor.putString("userNumber", separated[5]);
-                                    editor.putString("userLevel", separated[6]);
-                                    editor.putString("userName", separated[7]);
-                                    editor.putString("userAge", separated[8]);
-                                    editor.putString("userAddress", separated[9]);
-                                    editor.putString("userPosition", separated[10]);
-                                    editor.putString("userCourses", separated[11]);
-                                    editor.putString("userBookings", separated[12]);
-                                    editor.commit();
-                                    runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                    startActivity(new Intent(LoginActivity.this, ITE_MainMenu.class));
-                                    finish();
-                                }
-                                else{
-                                    showAlert();
+                                    if (pinString.equals(separated[3])) {
+                                        userinfo = getSharedPreferences("userinfo", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = userinfo.edit();
+                                        editor.putString("userID", separated[1]);
+                                        editor.putString("userEmail", separated[2]);
+                                        editor.putString("userPassword", separated[3]);
+                                        editor.putString("userPin", separated[4]);
+                                        editor.putString("userNumber", separated[5]);
+                                        editor.putString("userLevel", separated[6]);
+                                        editor.putString("userName", separated[7]);
+                                        editor.putString("userAge", separated[8]);
+                                        editor.putString("userAddress", separated[9]);
+                                        editor.putString("userPosition", separated[10]);
+                                        editor.putString("userCourses", separated[11]);
+                                        editor.putString("userBookings", separated[12]);
+                                        editor.commit();
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        startActivity(new Intent(LoginActivity.this, ITE_MainMenu.class));
+                                        finish();
+                                    } else {
+                                        showAlert();
+                                    }
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "No user with that ID", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
                                 }
                             }
                             else{
-                                Toast.makeText(LoginActivity.this,"No user with that ID", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "No internet connection", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
                         }

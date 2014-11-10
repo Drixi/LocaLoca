@@ -54,14 +54,10 @@
         android:text="Pick a date"
         android:id="@+id/tvBookDate" />
 
-    <EditText
-        android:layout_width="match_parent"
+    <DatePicker
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/etBookDate"
-        android:singleLine="true"
-        android:hint="Ex. 07/10/2001" />
+        android:id="@+id/dpBookDate" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -86,4 +82,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sTimeEnd" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit Booking"
+        android:id="@+id/btnSubmitBooking"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>
