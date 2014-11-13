@@ -99,15 +99,10 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/sTimeEnd" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Submit Booking"
-                    android:id="@+id/btnSubmitBooking"
-                    android:layout_gravity="center_horizontal" />
-
                 <EditText
                     android:id="@+id/etTitle"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="Enter a title for the event"
@@ -120,6 +115,13 @@
                     android:hint="Enter a decription of the event"
                     android:layout_marginBottom="5dp"
                     />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Submit Booking"
+                    android:id="@+id/btnSubmitBooking"
+                    android:layout_gravity="center_horizontal" />
 
             </LinearLayout>
         </LinearLayout>
