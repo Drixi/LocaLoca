@@ -2,8 +2,10 @@ package com.example.group3.localoca;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -18,10 +20,35 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Asbjørn on 07-11-2014.
  */
 public class BookingActivity extends Activity{
+
+    SharedPreferences userinfo;
+    String usernr;
+
+    HttpPost httppost;
+    StringBuffer buffer;
+    String response;
+    HttpClient httpclient;
+    List<NameValuePair> nameValuePairs;
+    ProgressDialog dialog = null;
+    static String[] separated;
+    ArrayList<String> list = new ArrayList<String>();
 
     TextView tvBooktitle, tvBookBuilding, tvBookFloor, tvBookRoom, tvBookDate, tvBookTimeStart, tvBookTimeEnd;
     Spinner sBuilding, sFloor, sRoom, sTimeStart, sTimeEnd;
@@ -39,6 +66,10 @@ public class BookingActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
+
+        userinfo = getSharedPreferences("userinfo", MODE_PRIVATE);
+        usernr = userinfo.getString("userNumber", "");
+
         tvBookBuilding = (TextView)findViewById(R.id.tvBookBuilding);
         tvBookFloor = (TextView)findViewById(R.id.tvBookFloor);
         tvBookRoom = (TextView)findViewById(R.id.tvBookRoom);
@@ -233,5 +264,38 @@ public class BookingActivity extends Activity{
 
             }
         });
+    }
+
+    public void logindb(){
+        try{
+
+            httpclient=new DefaultHttpClient();
+            httppost= new HttpPost("http://pomsen.com/phpscripts/placebookingPOST.php");
+            nameValuePairs = new ArrayList<NameValuePair>(9);
+            nameValuePairs.add(new BasicNameValuePair("usernr", usernr));
+            nameValuePairs.add(new BasicNameValuePair("title",""));
+            nameValuePairs.add(new BasicNameValuePair("description",""));
+            nameValuePairs.add(new BasicNameValuePair("roomid",""));
+            nameValuePairs.add(new BasicNameValuePair("timeofbooking",""));
+            nameValuePairs.add(new BasicNameValuePair("dateofbooking",""));
+            nameValuePairs.add(new BasicNameValuePair("timestart",""));
+            nameValuePairs.add(new BasicNameValuePair("timeend",""));
+            nameValuePairs.add(new BasicNameValuePair("date",""));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            response = httpclient.execute(httppost, responseHandler);
+
+            Log.d("drixi", response);
+            separated = response.split("#");
+            for (int i = 0; i < separated.length; ++i) {
+                list.add(separated[i]);}
+
+
+
+        }catch(IOException e){
+            Log.e("drixi", "FEJLET");
+
+        }
+
     }
 }
