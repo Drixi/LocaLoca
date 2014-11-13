@@ -341,14 +341,16 @@ public class BookingActivity extends Activity{
             String currentTime = sdftime.format(new Date());
             SimpleDateFormat sdfdate = new SimpleDateFormat("dd/MM/yyyy");
             String currentDate = sdfdate.format(new Date());
+            String roomid = BuildingChosen.toString() + "." +
+                    FloorChosen.toString() + "." + RoomChosen.toString().replaceAll(" .*", "");
+            System.out.println(roomid);
             httpclient=new DefaultHttpClient();
             httppost= new HttpPost("http://pomsen.com/phpscripts/placebookingPOST.php");
             nameValuePairs = new ArrayList<NameValuePair>(9);
             nameValuePairs.add(new BasicNameValuePair("usernr", usernr));
             nameValuePairs.add(new BasicNameValuePair("title", etTitle.getText().toString()));
             nameValuePairs.add(new BasicNameValuePair("description",etDescription.getText().toString()));
-            nameValuePairs.add(new BasicNameValuePair("roomid",BuildingChosen.toString() + "." +
-                    FloorChosen.toString() + "." + RoomChosen.toString().replaceAll(" .*", "")));
+            nameValuePairs.add(new BasicNameValuePair("roomid",roomid));
             nameValuePairs.add(new BasicNameValuePair("timeofbooking",currentTime));
             nameValuePairs.add(new BasicNameValuePair("dateofbooking",currentDate));
             nameValuePairs.add(new BasicNameValuePair("timestart",TimeStartChosen.toString()));
