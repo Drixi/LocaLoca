@@ -52,7 +52,8 @@ public class BookingActivity extends Activity{
     HttpClient httpclient;
     List<NameValuePair> nameValuePairs;
     ProgressDialog dialog = null;
-    static String[] separated;
+    String[] separated, roominfo;
+    String[][] matrix;
     ArrayList<String> list = new ArrayList<String>();
 
     TextView tvBooktitle, tvBookBuilding, tvBookFloor, tvBookRoom, tvBookDate, tvBookTimeStart, tvBookTimeEnd;
@@ -63,8 +64,6 @@ public class BookingActivity extends Activity{
     Object BuildingChosen, FloorChosen, RoomChosen, TimeStartChosen, TimeEndChosen;
     String[] buildingList = {"Choose a building", "A.C. Meyers Vænge 15","Frederikskaj 6", "Frederikskaj 10A", "Frederikskaj 10B", "Frederikskaj 12"};
     String[] FloorList = {"Choose a floor", "Ground Floor", "1st Floor", "2nd Floor", "3rd Floor", "4th Floor"};
-    String[] fk61st = {"Choose a room", "203","203A","203B","203C","203D","203E","204","205",
-            "207","208","209","210","211","212","213","214","215","216","217","218","219","220"};
     String[] TimeChoices = {"Choose time of day", "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00",
             "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"};
 
@@ -107,7 +106,7 @@ public class BookingActivity extends Activity{
 
         arrayadapter(buildingList, sBuilding);
         arrayadapter(FloorList, sFloor);
-        arrayadapter(fk61st, sRoom);
+
         arrayadapter(TimeChoices, sTimeStart);
         arrayadapter(TimeChoices, sTimeEnd);
 
@@ -153,8 +152,24 @@ public class BookingActivity extends Activity{
 
                 if (iCurrentSelection != position){
                     floorID = position;
+                    dialog = ProgressDialog.show(BookingActivity.this, "One moment please", "Fetching rooms");
+                    new Thread(new Runnable() {
+                        public void run() {
+                            getRooms();
+
+                        }
+                    }).start();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            arrayadapter(separated, sRoom);
+                            dialog.dismiss();
+                        }
+                    }, 1500);
+
                     System.out.println(floorID);
                     FloorChosen = sFloor.getItemAtPosition(position);
+
                     tvBookRoom.setVisibility(View.VISIBLE);
                     sRoom.setVisibility(View.VISIBLE);
                     sFloor.setEnabled(false);
@@ -242,8 +257,10 @@ public class BookingActivity extends Activity{
                 }
                 else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(BookingActivity.this);
-                    builder.setMessage("Building: " + BuildingChosen + "\nFloor: " + FloorChosen
-                            + "\nRoom: " + RoomChosen + "\nDate: " + dpBookDate.getDayOfMonth() + "\nTime: "
+                    builder.setMessage("Title: " + etTitle.getText().toString() + "\nDescription: " +
+                            etDescription.getText().toString() + "\nBuilding: " + BuildingChosen + "\nFloor: " + FloorChosen
+                            + "\nRoom: " + RoomChosen + "\nDate: " + String.valueOf(dpBookDate.getDayOfMonth())+"/"+
+                            String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear()) + "\nTime: "
                             + TimeStartChosen + "-" + TimeEndChosen)
                             .setCancelable(false)
                             .setTitle("Submit booking?")
@@ -295,6 +312,29 @@ public class BookingActivity extends Activity{
         });
     }
 
+    public void getRooms(){
+        try{
+            httpclient=new DefaultHttpClient();
+            httppost= new HttpPost("http://pomsen.com/phpscripts/getroomsPOST.php");
+            nameValuePairs = new ArrayList<NameValuePair>(2);
+            nameValuePairs.add(new BasicNameValuePair("building", String.valueOf(buildingID)));
+            nameValuePairs.add(new BasicNameValuePair("floor", String.valueOf(floorID)));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            response = httpclient.execute(httppost, responseHandler);
+
+            Log.d("drixi", response);
+            separated = response.split("@");
+            for (int i = 0; i < separated.length; ++i) {
+                list.add(separated[i]);
+            }
+
+        }catch(IOException e){
+            Log.e("drixi", "FEJLET");
+
+        }
+    }
+
     public void logindb(){
         try{
             SimpleDateFormat sdftime = new SimpleDateFormat("HH:mm");
@@ -307,13 +347,14 @@ public class BookingActivity extends Activity{
             nameValuePairs.add(new BasicNameValuePair("usernr", usernr));
             nameValuePairs.add(new BasicNameValuePair("title", etTitle.getText().toString()));
             nameValuePairs.add(new BasicNameValuePair("description",etDescription.getText().toString()));
-            nameValuePairs.add(new BasicNameValuePair("roomid","1"));
+            nameValuePairs.add(new BasicNameValuePair("roomid",BuildingChosen.toString() + "." +
+                    FloorChosen.toString() + "." + RoomChosen.toString().replaceAll(" .*", "")));
             nameValuePairs.add(new BasicNameValuePair("timeofbooking",currentTime));
             nameValuePairs.add(new BasicNameValuePair("dateofbooking",currentDate));
             nameValuePairs.add(new BasicNameValuePair("timestart",TimeStartChosen.toString()));
             nameValuePairs.add(new BasicNameValuePair("timeend",TimeEndChosen.toString()));
             nameValuePairs.add(new BasicNameValuePair("date", String.valueOf(dpBookDate.getDayOfMonth())+"/"+
-                    String.valueOf(dpBookDate.getMonth())+"/"+String.valueOf(dpBookDate.getYear())));
+                    String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear())));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             response = httpclient.execute(httppost, responseHandler);
@@ -321,7 +362,8 @@ public class BookingActivity extends Activity{
             Log.d("drixi", response);
             separated = response.split("#");
             for (int i = 0; i < separated.length; ++i) {
-                list.add(separated[i]);}
+                list.add(separated[i]);
+            }
 
 
 
@@ -332,10 +374,4 @@ public class BookingActivity extends Activity{
 
     }
 
-    private void dialogStart(String title, String description){
-        dialog = ProgressDialog.show(this, title, description, true);
-    }
-    private void dialogEnd(){
-        dialog.dismiss();
-    }
 }
