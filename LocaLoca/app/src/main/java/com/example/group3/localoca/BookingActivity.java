@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +44,7 @@ public class BookingActivity extends Activity{
 
     SharedPreferences userinfo;
     String usernr;
+    int buildingID, floorID;
 
     HttpPost httppost;
     StringBuffer buffer;
@@ -122,27 +124,14 @@ public class BookingActivity extends Activity{
         spinner.setAdapter(adapter);
     }
 
-    /*public void sClick(Spinner spinnerClick, Object o, TextView tvVisible, Spinner sVisible, EditText etVisible){
-        sBuilding.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
-                BuildingChoosen = sBuilding.getItemAtPosition(position);
-                tvBookFloor.setVisibility(View.VISIBLE);
-                sFloor.setVisibility(View.VISIBLE);
-                sBuilding.setEnabled(false);
-
-            }
-            public void onNothingSelected(AdapterView<?> arg0) { }
-        });
-
-    }*/
-
     public void sBuildingClick(){
         sBuilding.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             int iCurrentSelection;
             public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
 
                 if (iCurrentSelection != position){
+                    buildingID = position;
+                    System.out.println(buildingID);
                     BuildingChosen = sBuilding.getItemAtPosition(position);
                     tvBookFloor.setVisibility(View.VISIBLE);
                     sFloor.setVisibility(View.VISIBLE);
@@ -163,6 +152,8 @@ public class BookingActivity extends Activity{
             public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
 
                 if (iCurrentSelection != position){
+                    floorID = position;
+                    System.out.println(floorID);
                     FloorChosen = sFloor.getItemAtPosition(position);
                     tvBookRoom.setVisibility(View.VISIBLE);
                     sRoom.setVisibility(View.VISIBLE);
@@ -244,6 +235,12 @@ public class BookingActivity extends Activity{
         btnSubmitBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String stretTitle = etTitle.getText().toString();
+                String stretDescription = etDescription.getText().toString();
+                if (TextUtils.isEmpty(stretTitle) || TextUtils.isEmpty(stretDescription)) {
+                    Toast.makeText(BookingActivity.this, "Title or Description is missing", Toast.LENGTH_SHORT).show();
+                }
+                else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(BookingActivity.this);
                     builder.setMessage("Building: " + BuildingChosen + "\nFloor: " + FloorChosen
                             + "\nRoom: " + RoomChosen + "\nDate: " + dpBookDate.getDayOfMonth() + "\nTime: "
@@ -271,12 +268,11 @@ public class BookingActivity extends Activity{
                                                 public void run() {
                                                     //dialogEnd();
                                                     System.out.println(separated[1]);
-                                                    if(separated[1].equals("Success")){
+                                                    if (separated[1].equals("Success")) {
                                                         Toast.makeText(BookingActivity.this, "Your booking has been successfully placed"
                                                                 , Toast.LENGTH_SHORT).show();
                                                         finish();
-                                                    }
-                                                    else {
+                                                    } else {
                                                         Toast.makeText(BookingActivity.this, "Booking failed, please check your connection"
                                                                 , Toast.LENGTH_SHORT).show();
                                                     }
@@ -294,6 +290,7 @@ public class BookingActivity extends Activity{
                             + "\nRoom: " + RoomChosen + "\nDate: " + etBookDate.getText() + "\nTime: "
                             + TimeStartChosen + "-" + TimeEndChosen, Toast.LENGTH_SHORT);*/
 
+                }
             }
         });
     }
