@@ -76,6 +76,4 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-# Idea Folder
-.idea
 *.iml
