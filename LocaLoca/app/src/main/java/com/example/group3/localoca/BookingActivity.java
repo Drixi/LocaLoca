@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -52,7 +49,7 @@ public class BookingActivity extends Activity{
     HttpClient httpclient;
     List<NameValuePair> nameValuePairs;
     ProgressDialog dialog = null;
-    String[] separated, roominfo;
+    String[] separated;
     String[][] matrix;
     ArrayList<String> list = new ArrayList<String>();
 
@@ -64,8 +61,9 @@ public class BookingActivity extends Activity{
     Object BuildingChosen, FloorChosen, RoomChosen, TimeStartChosen, TimeEndChosen;
     String[] buildingList = {"Choose a building", "A.C. Meyers Vænge 15","Frederikskaj 6", "Frederikskaj 10A", "Frederikskaj 10B", "Frederikskaj 12"};
     String[] FloorList = {"Choose a floor", "Ground Floor", "1st Floor", "2nd Floor", "3rd Floor", "4th Floor"};
-    String[] TimeChoices = {"Choose time of day", "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00",
-            "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"};
+    String[] TimeChoices = {"Choose a time", "00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00"
+            ,"08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00",
+            "17:00","18:00","19:00","20:00","21:00","22:00","23:00","24:00"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +106,6 @@ public class BookingActivity extends Activity{
         arrayadapter(FloorList, sFloor);
 
         arrayadapter(TimeChoices, sTimeStart);
-        arrayadapter(TimeChoices, sTimeEnd);
 
         sBuildingClick();
         sFloorClick();
@@ -134,7 +131,6 @@ public class BookingActivity extends Activity{
                     BuildingChosen = sBuilding.getItemAtPosition(position);
                     tvBookFloor.setVisibility(View.VISIBLE);
                     sFloor.setVisibility(View.VISIBLE);
-                    sBuilding.setEnabled(false);
                 }
                 iCurrentSelection = position;
             }
@@ -162,8 +158,15 @@ public class BookingActivity extends Activity{
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            arrayadapter(separated, sRoom);
-                            dialog.dismiss();
+                            if(separated != null) {
+                                arrayadapter(separated, sRoom);
+                                dialog.dismiss();
+                            }
+                            else{
+                                Toast.makeText(BookingActivity.this, "Unable to get roomlist, please check your connection" +
+                                        " and try again", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
                         }
                     }, 1500);
 
@@ -172,7 +175,6 @@ public class BookingActivity extends Activity{
 
                     tvBookRoom.setVisibility(View.VISIBLE);
                     sRoom.setVisibility(View.VISIBLE);
-                    sFloor.setEnabled(false);
                 }
                 iCurrentSelection = position;
             }
@@ -194,7 +196,12 @@ public class BookingActivity extends Activity{
                     dpBookDate.setVisibility(View.VISIBLE);
                     tvBookTimeStart.setVisibility(View.VISIBLE);
                     sTimeStart.setVisibility(View.VISIBLE);
-                    sRoom.setEnabled(false);
+                    new Thread(new Runnable() {
+                        public void run() {
+                            getCurrentBookings();
+
+                        }
+                    }).start();
                 }
                 iCurrentSelection = position;
             }
@@ -213,8 +220,8 @@ public class BookingActivity extends Activity{
                 if (iCurrentSelection != position){
                     TimeStartChosen = sTimeStart.getItemAtPosition(position);
                     tvBookTimeEnd.setVisibility(View.VISIBLE);
+                    arrayadapter(TimeChoices, sTimeEnd);
                     sTimeEnd.setVisibility(View.VISIBLE);
-                    sTimeStart.setEnabled(false);
                 }
                 iCurrentSelection = position;
             }
@@ -232,10 +239,38 @@ public class BookingActivity extends Activity{
 
                 if (iCurrentSelection != position){
                     TimeEndChosen = sTimeEnd.getItemAtPosition(position);
-                    btnSubmitBooking.setVisibility(View.VISIBLE);
-                    etTitle.setVisibility(View.VISIBLE);
-                    etDescription.setVisibility(View.VISIBLE);
-                    sTimeEnd.setEnabled(false);
+                    //dialog = ProgressDialog.show(BookingActivity.this, "One moment please", "Getting current bookings");
+                    //new Handler().postDelayed(new Runnable() {
+                    //    @Override
+                    //    public void run() {
+                                for(int i=0; separated.length > i; i++){
+                                    System.out.println("dbStart:" + Integer.valueOf(matrix[i][2].replaceAll(":.*", "")) + " " +
+                                            "start:" + Integer.valueOf(TimeStartChosen.toString().replaceAll(":.*", "")) + " " +
+                                            "dbend:" + Integer.valueOf(matrix[i][3].replaceAll(":.*", "")) + " " +
+                                            "end:" + Integer.valueOf(TimeEndChosen.toString().replaceAll(":.*", "")) + " " +
+                                            "dbdate" + matrix[i][4] + " " + "date" + (String.valueOf(dpBookDate.getDayOfMonth())+"/"+
+                                            String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear())));
+                                    if(Integer.valueOf(matrix[i][2].replaceAll(":.*", "")) <
+                                            Integer.valueOf(TimeStartChosen.toString().replaceAll(":.*", "")) &&
+                                            Integer.valueOf(matrix[i][3].replaceAll(":.*", "")) >
+                                            Integer.valueOf(TimeEndChosen.toString().replaceAll(":.*", "")) &&
+                                            matrix[i][4].equals(String.valueOf(dpBookDate.getDayOfMonth())+"/"+
+                                            String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear()))){
+                                        Toast.makeText(BookingActivity.this, "Booking has already been placed, please choose another one\n"
+                                                + "\nTitle: " + matrix[i][1] + "\nDate: " + matrix[i][4] + "\nTime starting: " + matrix[i][2] +
+                                                "\nTime Ending: " + matrix[i][3], Toast.LENGTH_LONG).show();
+
+                                    }
+                                    else{
+
+                                        btnSubmitBooking.setVisibility(View.VISIBLE);
+                                        etTitle.setVisibility(View.VISIBLE);
+                                        etDescription.setVisibility(View.VISIBLE);
+                                    }
+                                dialog.dismiss();
+                            }
+                    //    }
+                    //}, 1500);
                 }
                 iCurrentSelection = position;
             }
@@ -252,61 +287,66 @@ public class BookingActivity extends Activity{
             public void onClick(View v) {
                 String stretTitle = etTitle.getText().toString();
                 String stretDescription = etDescription.getText().toString();
-                if (TextUtils.isEmpty(stretTitle) || TextUtils.isEmpty(stretDescription)) {
-                    Toast.makeText(BookingActivity.this, "Title or Description is missing", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(BookingActivity.this);
-                    builder.setMessage("Title: " + etTitle.getText().toString() + "\nDescription: " +
-                            etDescription.getText().toString() + "\nBuilding: " + BuildingChosen + "\nFloor: " + FloorChosen
-                            + "\nRoom: " + RoomChosen + "\nDate: " + String.valueOf(dpBookDate.getDayOfMonth())+"/"+
-                            String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear()) + "\nTime: "
-                            + TimeStartChosen + "-" + TimeEndChosen)
-                            .setCancelable(false)
-                            .setTitle("Submit booking?")
-                            .setPositiveButton("Cancel",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    })
-                            .setNegativeButton("Yes",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(final DialogInterface dialog, int id) {
-                                            new Thread(new Runnable() {
-                                                public void run() {
-                                                    //dialogStart("Booking in progress", "Your booking is being placed");
-                                                    logindb();
+                if (Integer.valueOf(TimeStartChosen.toString().replaceAll(":.*", "")) >
+                        Integer.valueOf(TimeEndChosen.toString().replaceAll(":.*", ""))) {
+                    Toast.makeText(BookingActivity.this, "Starting time cannot be before ending time", Toast.LENGTH_SHORT).show();
 
-                                                }
-                                            }).start();
-                                            new Handler().postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    //dialogEnd();
-                                                    System.out.println(separated[1]);
-                                                    if (separated[1].equals("Success")) {
-                                                        Toast.makeText(BookingActivity.this, "Your booking has been successfully placed"
-                                                                , Toast.LENGTH_SHORT).show();
-                                                        finish();
-                                                    } else {
-                                                        Toast.makeText(BookingActivity.this, "Booking failed, please check your connection"
-                                                                , Toast.LENGTH_SHORT).show();
+                } else {
+                    if (TextUtils.isEmpty(stretTitle) || TextUtils.isEmpty(stretDescription)) {
+                        Toast.makeText(BookingActivity.this, "Title or Description is missing", Toast.LENGTH_SHORT).show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(BookingActivity.this);
+                        builder.setMessage("Title: " + etTitle.getText().toString() + "\nDescription: " +
+                                etDescription.getText().toString() + "\nBuilding: " + BuildingChosen + "\nFloor: " + FloorChosen
+                                + "\nRoom: " + RoomChosen + "\nDate: " + String.valueOf(dpBookDate.getDayOfMonth()) + "/" +
+                                String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear()) + "\nTime: "
+                                + TimeStartChosen + "-" + TimeEndChosen)
+                                .setCancelable(false)
+                                .setTitle("Submit booking?")
+                                .setPositiveButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        })
+                                .setNegativeButton("Yes",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(final DialogInterface dialog, int id) {
+                                                new Thread(new Runnable() {
+                                                    public void run() {
+                                                        //dialogStart("Booking in progress", "Your booking is being placed");
+                                                        makeBooking();
+
                                                     }
-                                                }
-                                            }, 1500);
+                                                }).start();
+                                                new Handler().postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        //dialogEnd();
+                                                        System.out.println(separated[0]);
+                                                        if (separated[1].equals("Success")) {
+                                                            Toast.makeText(BookingActivity.this, "Your booking has been successfully placed"
+                                                                    , Toast.LENGTH_SHORT).show();
+                                                            finish();
+                                                        } else {
+                                                            Toast.makeText(BookingActivity.this, "Booking failed, please check your connection"
+                                                                    , Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                }, 1500);
 
 
-                                        }
-                                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                                            }
+                                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
 
 
                     /*Toast.makeText(BookingActivity.this, "Building: " + BuildingChosen + "\nFloor: " + FloorChosen
                             + "\nRoom: " + RoomChosen + "\nDate: " + etBookDate.getText() + "\nTime: "
                             + TimeStartChosen + "-" + TimeEndChosen, Toast.LENGTH_SHORT);*/
 
+                    }
                 }
             }
         });
@@ -335,14 +375,14 @@ public class BookingActivity extends Activity{
         }
     }
 
-    public void logindb(){
+    public void makeBooking(){
         try{
             SimpleDateFormat sdftime = new SimpleDateFormat("HH:mm");
             String currentTime = sdftime.format(new Date());
             SimpleDateFormat sdfdate = new SimpleDateFormat("dd/MM/yyyy");
             String currentDate = sdfdate.format(new Date());
-            String roomid = BuildingChosen.toString() + "." +
-                    FloorChosen.toString() + "." + RoomChosen.toString().replaceAll(" .*", "");
+            String roomid = buildingID + "." +
+                    floorID + "." + RoomChosen.toString().replaceAll(" .*", "");
             System.out.println(roomid);
             httpclient=new DefaultHttpClient();
             httppost= new HttpPost("http://pomsen.com/phpscripts/placebookingPOST.php");
@@ -369,6 +409,31 @@ public class BookingActivity extends Activity{
 
 
 
+        }catch(IOException e){
+            Log.e("drixi", "FEJLET");
+
+        }
+    }
+
+    public void getCurrentBookings(){
+        try{
+
+            httpclient=new DefaultHttpClient();
+            httppost= new HttpPost("http://pomsen.com/phpscripts/getExistingBookingsPOST.php");
+            nameValuePairs = new ArrayList<NameValuePair>(1);
+            String roomid = buildingID + "." +
+                    floorID + "." + RoomChosen.toString().replaceAll(" .*", "");
+            nameValuePairs.add(new BasicNameValuePair("roomid", roomid));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            response = httpclient.execute(httppost, responseHandler);
+
+            Log.d("drixi", response);
+            separated = response.split("@");
+            matrix = new String[response.length()][];
+            for(int i=0; i<separated.length; i++){
+                matrix[i] = separated[i].split("#");
+            }
         }catch(IOException e){
             Log.e("drixi", "FEJLET");
 
