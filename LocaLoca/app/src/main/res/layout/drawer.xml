@@ -8,7 +8,7 @@
         android:id="@+id/contentFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        </FrameLayout>
+    </FrameLayout>
 
     <ListView
         android:id="@+id/drawerList"
@@ -16,6 +16,7 @@
         android:layout_height="match_parent"
         android:background="@color/abc_search_url_text_normal"
         android:divider="@null"
+        android:dividerHeight="0dp"
         android:entries="@array/drawerObjets"
         android:layout_gravity="start">
      </ListView>
