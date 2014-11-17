@@ -12,6 +12,9 @@
 bin/
 gen/
 
+# Idea files
+.idea/
+
 # Gradle files
 .gradle/
 build/
@@ -37,7 +40,8 @@ proguard/
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -52,7 +56,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-<<<<<<< HEAD
 
 # Windows
 # =========================
@@ -74,28 +77,3 @@ $RECYCLE.BIN/
 *.msp
 
 *.iml
-=======
-
-# Windows
-# =========================
-
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Idea Folder
-.idea
-*.iml
->>>>>>> parent of 1ac345b... fixed gitignore
