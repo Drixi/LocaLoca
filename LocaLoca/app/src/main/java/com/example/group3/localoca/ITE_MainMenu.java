@@ -52,19 +52,18 @@ public class ITE_MainMenu extends Activity {
         btn_main_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // CONTENT HERE //
+                Intent switchtoregister = new Intent(v.getContext(), DrawerActivity.class);
+                startActivity(switchtoregister);
             }
         });
     // Top right button
         btn_main_4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent switchtoregister = new Intent(v.getContext(), CalenderActivity.class);
                 startActivity(switchtoregister);
             }
         });
-
     }
     public void onBackPressed() {
         //if(USER_IS_GOING_TO_EXIT) {

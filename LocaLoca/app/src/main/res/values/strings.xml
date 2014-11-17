@@ -7,5 +7,13 @@
     <string name="title_activity_main_window">MainWindow</string>
     <color name="App_BG">#ff000000</color>
     <color name="Btn_main">#7D7D7D</color>
+    <string-array name="drawerObjets">
+        <item >Map</item>
+        <item >Bookings</item>
+        <item >Calendar</item>
+        <item >Settings</item>
+        <item >About</item>
+        <item >Log out</item>
+    </string-array>
 
 </resources>
