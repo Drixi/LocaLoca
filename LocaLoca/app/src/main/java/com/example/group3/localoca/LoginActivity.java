@@ -147,8 +147,7 @@ public class LoginActivity extends Activity {
             httpclient=new DefaultHttpClient();
             httppost= new HttpPost("http://pomsen.com/phpscripts/loginPOST.php");
             nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair("email",etUser.getText().toString().trim()));
-            //nameValuePairs.add(new BasicNameValuePair("pin",etPIN.getText().toString().trim()));
+            nameValuePairs.add(new BasicNameValuePair("email",etUser.getText().toString().trim().replaceAll("'", "")));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             response = httpclient.execute(httppost, responseHandler);
