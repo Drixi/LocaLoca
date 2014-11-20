@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,18 +53,22 @@ public class BookingActivity extends Activity{
     String[] separated;
     String[][] matrix;
     ArrayList<String> list = new ArrayList<String>();
+    ArrayList<String> TimeChoicesStart = new ArrayList<String>();
+    ArrayList<String> TimeChoicesEnd = new ArrayList<String>();
 
     TextView tvBooktitle, tvBookBuilding, tvBookFloor, tvBookRoom, tvBookDate, tvBookTimeStart, tvBookTimeEnd;
     Spinner sBuilding, sFloor, sRoom, sTimeStart, sTimeEnd;
     EditText etTitle, etDescription;
-    Button btnSubmitBooking;
+    Button btnSubmitBooking,btnCheckDate;
     DatePicker dpBookDate;
     Object BuildingChosen, FloorChosen, RoomChosen, TimeStartChosen, TimeEndChosen;
     String[] buildingList = {"Choose a building", "A.C. Meyers Vænge 15","Frederikskaj 6", "Frederikskaj 10A", "Frederikskaj 10B", "Frederikskaj 12"};
     String[] FloorList = {"Choose a floor", "Ground Floor", "1st Floor", "2nd Floor", "3rd Floor", "4th Floor"};
-    String[] TimeChoices = {"00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00"
+    /*String[] TimeChoices = {"00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00"
             ,"08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00",
-            "17:00","18:00","19:00","20:00","21:00","22:00","23:00","24:00"};
+            "17:00","18:00","19:00","20:00","21:00","22:00","23:00","24:00"};*/
+    String[] TimeChoicesStartString;
+    String[] TimeChoicesEndString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,7 @@ public class BookingActivity extends Activity{
         userinfo = getSharedPreferences("userinfo", MODE_PRIVATE);
         usernr = userinfo.getString("userNumber", "");
 
+        btnCheckDate = (Button)findViewById(R.id.btnCheckDate);
         tvBookBuilding = (TextView)findViewById(R.id.tvBookBuilding);
         tvBookFloor = (TextView)findViewById(R.id.tvBookFloor);
         tvBookRoom = (TextView)findViewById(R.id.tvBookRoom);
@@ -101,19 +107,19 @@ public class BookingActivity extends Activity{
         btnSubmitBooking.setVisibility(View.INVISIBLE);
         etTitle.setVisibility(View.INVISIBLE);
         etDescription.setVisibility(View.INVISIBLE);
+        btnCheckDate.setVisibility(View.INVISIBLE);
 
         arrayadapter(buildingList, sBuilding);
         arrayadapter(FloorList, sFloor);
 
-        arrayadapter(TimeChoices, sTimeStart);
-        arrayadapter(TimeChoices, sTimeEnd);
-
+        btnCheckDateClick();
         sBuildingClick();
         sFloorClick();
         sRoomClick();
         sTimeStartClick();
         sTimeEndClick();
         btnSubmitCLick();
+        dpChanged();
     }
 
     public void arrayadapter(String[] list, Spinner spinner){
@@ -132,6 +138,13 @@ public class BookingActivity extends Activity{
                     BuildingChosen = sBuilding.getItemAtPosition(position);
                     tvBookFloor.setVisibility(View.VISIBLE);
                     sFloor.setVisibility(View.VISIBLE);
+                    sRoom.setVisibility(View.INVISIBLE);
+                    btnCheckDate.setVisibility(View.INVISIBLE);
+                    tvBookTimeEnd.setVisibility(View.INVISIBLE);
+                    sTimeEnd.setVisibility(View.INVISIBLE);
+                    etTitle.setVisibility(View.INVISIBLE);
+                    etDescription.setVisibility(View.INVISIBLE);
+                    btnSubmitBooking.setVisibility(View.INVISIBLE);
                 }
                 iCurrentSelection = position;
             }
@@ -176,6 +189,12 @@ public class BookingActivity extends Activity{
 
                     tvBookRoom.setVisibility(View.VISIBLE);
                     sRoom.setVisibility(View.VISIBLE);
+                    btnCheckDate.setVisibility(View.INVISIBLE);
+                    tvBookTimeEnd.setVisibility(View.INVISIBLE);
+                    sTimeEnd.setVisibility(View.INVISIBLE);
+                    etTitle.setVisibility(View.INVISIBLE);
+                    etDescription.setVisibility(View.INVISIBLE);
+                    btnSubmitBooking.setVisibility(View.INVISIBLE);
                 }
                 iCurrentSelection = position;
             }
@@ -195,19 +214,13 @@ public class BookingActivity extends Activity{
                     RoomChosen = sRoom.getItemAtPosition(position);
                     tvBookDate.setVisibility(View.VISIBLE);
                     dpBookDate.setVisibility(View.VISIBLE);
-                    tvBookTimeStart.setVisibility(View.VISIBLE);
-                    sTimeStart.setVisibility(View.VISIBLE);
+                    btnCheckDate.setVisibility(View.VISIBLE);
                     tvBookTimeEnd.setVisibility(View.INVISIBLE);
+                    sTimeStart.setVisibility(View.INVISIBLE);
                     sTimeEnd.setVisibility(View.INVISIBLE);
                     etTitle.setVisibility(View.INVISIBLE);
                     etDescription.setVisibility(View.INVISIBLE);
                     btnSubmitBooking.setVisibility(View.INVISIBLE);
-                    new Thread(new Runnable() {
-                        public void run() {
-                            getCurrentBookings();
-
-                        }
-                    }).start();
                 }
                 iCurrentSelection = position;
             }
@@ -216,6 +229,82 @@ public class BookingActivity extends Activity{
             }
         });
 
+    }
+
+    public void btnCheckDateClick() {
+        btnCheckDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog = ProgressDialog.show(BookingActivity.this, "One moment please", "Getting the current bookings placed");
+                new Thread(new Runnable() {
+                    public void run() {
+                        getCurrentBookings();
+                    }
+                }).start();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        TimeChoicesStart.clear();
+                        TimeChoicesEnd.clear();
+                        for (int i = 0; i < 25; i++) {
+                            TimeChoicesStart.add(i + ":00");
+                            TimeChoicesEnd.add(i + ":00");
+                        }
+                        if (separated[1].equals("Fail") != true) {
+
+                            for (int j = 1; separated.length > j; j++) {
+                                String userDate = String.valueOf(dpBookDate.getDayOfMonth()) + "/" +
+                                        String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
+                                String serverDate = matrix[j][4];
+                                if(userDate.equals(serverDate)) {
+                                    int serverTimeStart = Integer.valueOf(matrix[j][2].replaceAll(":.*", ""));
+                                    int serverTimeEnd = Integer.valueOf(matrix[j][3].replaceAll(":.*", ""));
+                                    for (int i = 0; i < 25; i++) {
+                                        String currenttimei = i + ":00";
+                                        if (i >= serverTimeStart && serverTimeEnd > i) {
+                                            TimeChoicesStart.remove(currenttimei);
+                                        }
+                                        if (i > serverTimeStart && serverTimeEnd >= i) {
+                                            TimeChoicesEnd.remove(currenttimei);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        TimeChoicesStartString = new String[TimeChoicesStart.size()];
+                        TimeChoicesStart.toArray(TimeChoicesStartString);
+                        TimeChoicesEndString = new String[TimeChoicesEnd.size()];
+                        TimeChoicesEnd.toArray(TimeChoicesEndString);
+                        arrayadapter(TimeChoicesStartString, sTimeStart);
+                        arrayadapter(TimeChoicesEndString, sTimeEnd);
+                        sTimeStart.setVisibility(View.VISIBLE);
+                        tvBookTimeStart.setVisibility(View.VISIBLE);
+                        etTitle.setVisibility(View.INVISIBLE);
+                        etDescription.setVisibility(View.INVISIBLE);
+                        btnSubmitBooking.setVisibility(View.INVISIBLE);
+                        dialog.dismiss();
+                    }
+                }, 1500);
+            }
+        });
+    }
+
+    public void dpChanged() {
+        dpBookDate.init(dpBookDate.getYear(), dpBookDate.getMonth(), dpBookDate.getDayOfMonth(),
+                new DatePicker.OnDateChangedListener() {
+
+            @Override
+            public void onDateChanged(DatePicker arg0, int arg1, int arg2, int arg3) {
+                tvBookTimeEnd.setVisibility(View.INVISIBLE);
+                sTimeStart.setVisibility(View.INVISIBLE);
+                sTimeEnd.setVisibility(View.INVISIBLE);
+                etTitle.setVisibility(View.INVISIBLE);
+                etDescription.setVisibility(View.INVISIBLE);
+                btnSubmitBooking.setVisibility(View.INVISIBLE);
+                sTimeStart.setVisibility(View.INVISIBLE);
+                tvBookTimeStart.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     public void sTimeStartClick(){
@@ -258,7 +347,7 @@ public class BookingActivity extends Activity{
                                             String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
                                     String serverDate = matrix[i][4];
                                     if(serverDate.equals(userDate)) {
-                                        if (serverTimeStart < userTimeStart && userTimeStart < serverTimeEnd || userTimeEnd < serverTimeEnd) {
+                                        if (userTimeStart < serverTimeStart && serverTimeEnd < userTimeEnd) {
                                             Toast.makeText(BookingActivity.this, "Booking has already been placed, please choose another one\n"
                                                     + "\nTitle: " + matrix[i][1] + "\nDate: " + matrix[i][4] + "\nTime starting: " + matrix[i][2] +
                                                     "\nTime Ending: " + matrix[i][3], Toast.LENGTH_LONG).show();
@@ -266,19 +355,22 @@ public class BookingActivity extends Activity{
                                             etTitle.setVisibility(View.INVISIBLE);
                                             etDescription.setVisibility(View.INVISIBLE);
 
-                                        } else {
+                                        }/* else {
                                             btnSubmitBooking.setVisibility(View.VISIBLE);
                                             etTitle.setVisibility(View.VISIBLE);
                                             etDescription.setVisibility(View.VISIBLE);
-                                        }
-                                    }else {
+                                        }*/
+                                    }/*else {
                                         btnSubmitBooking.setVisibility(View.VISIBLE);
                                         etTitle.setVisibility(View.VISIBLE);
                                         etDescription.setVisibility(View.VISIBLE);
-                                    }
+                                    }*/
                                     }
                                     dialog.dismiss();
                                 }
+                    btnSubmitBooking.setVisibility(View.VISIBLE);
+                    etTitle.setVisibility(View.VISIBLE);
+                    etDescription.setVisibility(View.VISIBLE);
                 }
                 iCurrentSelection = position;
             }
