@@ -1,15 +1,23 @@
 package com.example.group3.localoca;
 
+import android.content.Context;
 import android.content.res.Configuration;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -21,15 +29,16 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     private ListView listView;
     private String[] drawerObjects;
     private ActionBarDrawerToggle drawerListener;
+    private Myadapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer);
         drawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
-        drawerObjects=getResources().getStringArray(R.array.drawerObjets);
         listView =(ListView) findViewById(R.id.drawerList);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerObjects));
+        myAdapter = new Myadapter(this);
+        listView.setAdapter(myAdapter);
         listView.setOnItemClickListener(this);
         drawerListener= new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close ){
             @Override
@@ -74,16 +83,58 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
         long id ) {
-        Toast.makeText(this, drawerObjects[position]+" was selected ", Toast.LENGTH_LONG).show();
         selectItem(position);
     }
+
     public void selectItem(int position){
         listView.setItemChecked(position, true);
-        setTitle(drawerObjects[position]);
     }
+
     public void setTitle(String title){
         getSupportActionBar().setTitle(title);
     }
 
-    
+}
+
+class Myadapter extends BaseAdapter {
+    private Context context;
+    String[] drawerObjects;
+    int[] images = {R.drawable.s_mapslogo, R.drawable.s_booklogo, R.drawable.s_calendarlogo, R.drawable.s_settings, R.drawable.s_about, R.drawable.s_logout};
+
+    public Myadapter(Context context) {
+        this.context=context;
+        drawerObjects=context.getResources().getStringArray(R.array.drawerObjets);
+    }
+
+    @Override
+    public int getCount() {
+        return drawerObjects.length;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return drawerObjects[position];
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View row = null;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = inflater.inflate(R.layout.c_drawer_layout, parent, Boolean.parseBoolean(null));
+        }
+        else {
+            row = convertView;
+        }
+        TextView titleText = (TextView) row.findViewById(R.id.textView);
+        ImageView titleImage = (ImageView) row.findViewById(R.id.imageView);
+        titleText.setText(drawerObjects[position]);
+        titleImage.setImageResource(images[position]);
+        return row;
+    }
 }
