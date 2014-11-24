@@ -14,7 +14,7 @@
         android:id="@+id/drawerList"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:background="@color/abc_search_url_text_normal"
+        android:background="@drawable/bg_gradi"
         android:divider="@null"
         android:dividerHeight="0dp"
         android:entries="@array/drawerObjets"
