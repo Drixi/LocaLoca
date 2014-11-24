@@ -128,10 +128,12 @@ public class CalenderActivity extends Activity {
     private void lvRoomsPopulate(){
         for(int i = 0; i<7; i++){
             lvlist.add(getDayString(i) + " " + getDateString(i));
-
-            for(int n = 0; n<separated.length-1; n++){
-                if(getDateString(i).equals(matrix[n][9]))
-                lvlist.add(matrix[n][7] + " " + matrix[n][2] + "\n" +  matrix[n][8] + " " + matrix[n][3]);
+            if(separated.length > 0) {
+                for (int n = 0; n < separated.length - 1; n++) {
+                    if (getDateString(i).equals(matrix[n][9]))
+                        lvlist.add(matrix[n][7] + " " + matrix[n][2] + "\n" + matrix[n][8] + " " + matrix[n][3]);
+                    list.add(matrix[n][2]);
+                }
             }
         }
         arrayadapter();
@@ -141,8 +143,11 @@ public class CalenderActivity extends Activity {
         lvDay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Object o = lvDay.getItemAtPosition(position);
-                Toast.makeText(getBaseContext(), o.toString(), Toast.LENGTH_SHORT).show();
+                for(int i = 0 ; separated.length > i ; i++){
+                    if(list.contains(matrix[i][2])){
+                        Toast.makeText(CalenderActivity.this, "Changing screen", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
