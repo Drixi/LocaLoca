@@ -129,10 +129,11 @@ public class CalenderActivity extends Activity {
         for(int i = 0; i<7; i++){
             lvlist.add(getDayString(i) + " " + getDateString(i));
             if(separated.length > 0) {
-                for (int n = 0; n < separated.length - 1; n++) {
-                    if (getDateString(i).equals(matrix[n][9]))
-                        lvlist.add(matrix[n][7] + " " + matrix[n][2] + "\n" + matrix[n][8] + " " + matrix[n][3]);
-                    list.add(matrix[n][2]);
+                for (int n = 1; separated.length > n; n++) {
+                    if (getDateString(i).equals(matrix[n][8])) {
+                        lvlist.add(matrix[n][6] + " " + matrix[n][1] + " \n" + matrix[n][7] + " " + matrix[n][2]);
+                        list.add(matrix[n][1]);
+                    }
                 }
             }
         }
@@ -143,11 +144,15 @@ public class CalenderActivity extends Activity {
         lvDay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                for(int i = 0 ; separated.length > i ; i++){
-                    if(list.contains(matrix[i][2])){
+                Object o = lvDay.getItemAtPosition(position);
+                String[] strO = String.valueOf(o).split(" ");
+                System.out.println(strO[1]);
+                for(int i = 1 ; separated.length > i ; i++){
+                    if(list.contains(matrix[i][1])){
                         Toast.makeText(CalenderActivity.this, "Changing screen", Toast.LENGTH_SHORT).show();
                     }
                 }
+
             }
         });
     }
