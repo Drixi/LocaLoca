@@ -10,6 +10,8 @@
 
     <color name="App_BG">#ff000000</color>
     <color name="Btn_main">#7D7D7D</color>
+    <color name="direct_lblue">#BFE0ED</color>
+    <color name="direct_mblue">#8ED7D6</color>
 
     <string-array name="drawerObjets">
         <item >Map</item>

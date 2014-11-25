@@ -36,7 +36,7 @@ public class ITE_MainMenu extends Activity {
         btn_main_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent switchtoregister = new Intent(v.getContext(), RoomList.class);
+                Intent switchtoregister = new Intent(v.getContext(), MapFragment.class);
                 startActivity(switchtoregister);
             }
         });
