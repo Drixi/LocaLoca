@@ -38,7 +38,7 @@ import java.util.List;
 public class CalenderActivity extends Activity {
 
     ListView lvDay;
-    TextView tvBookingTitle, tvBooking;
+    TextView tvBookingTitle, tvBookingID, tvBookingDescription, tvBookingRoom, tvBookingPlacedDate, tvBookingTime, tvBookingDate;
     SharedPreferences userinfo;
     String usernr;
     String[][] matrix;
@@ -60,9 +60,12 @@ public class CalenderActivity extends Activity {
         usernr = userinfo.getString("userNumber", "");
         lvDay = (ListView)findViewById(R.id.lvDay);
         tvBookingTitle = (TextView)findViewById(R.id.tvBookingTitle);
-        tvBooking = (TextView)findViewById(R.id.tvBooking);
-        tvBookingTitle.setVisibility(View.INVISIBLE);
-        tvBooking.setVisibility(View.INVISIBLE);
+        tvBookingID = (TextView)findViewById(R.id.tvBookingID);
+        tvBookingDescription = (TextView)findViewById(R.id.tvBookingDescription);
+        tvBookingRoom = (TextView)findViewById(R.id.tvBookingRoom);
+        tvBookingPlacedDate = (TextView)findViewById(R.id.tvBookingPlacedDate);
+        tvBookingTime = (TextView)findViewById(R.id.tvBookingTime);
+        tvBookingDate = (TextView)findViewById(R.id.tvBookingDate);
         lvClick();
         dialog = ProgressDialog.show(this, "One moment please", "Fetching your calender");
         new Thread(new Runnable() {
@@ -147,9 +150,20 @@ public class CalenderActivity extends Activity {
                 Object o = lvDay.getItemAtPosition(position);
                 String[] strO = String.valueOf(o).split(" ");
                 System.out.println(strO[1]);
-                for(int i = 1 ; separated.length > i ; i++){
-                    if(list.contains(matrix[i][1])){
-                        Toast.makeText(CalenderActivity.this, "Changing screen", Toast.LENGTH_SHORT).show();
+                if(list.contains(strO[1])){
+                    for(int i = 1 ; separated.length > i ; i++){
+                        if(strO[1] == matrix[i][1]){
+                            lvDay.setVisibility(View.GONE);
+                            tvBookingID.setText(matrix[i][0]);
+                            tvBookingTitle.setText(matrix[i][1]);
+                            tvBookingDescription.setText(matrix[i][2]);
+                            tvBookingRoom.setText(matrix[i][3]);
+                            tvBookingPlacedDate.setText(matrix[i][4] + " - " + matrix[i][5]);
+                            tvBookingTime.setText(matrix[i][6] + " - " + matrix[i][7]);
+                            tvBookingDate.setText(matrix[i][8]);
+                            Toast.makeText(CalenderActivity.this, "Changing screen", Toast.LENGTH_SHORT).show();
+                        }
+                        //Toast.makeText(CalenderActivity.this, "Changing screen", Toast.LENGTH_SHORT).show();
                     }
                 }
 
