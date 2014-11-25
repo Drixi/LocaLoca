@@ -99,7 +99,7 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
 class Myadapter extends BaseAdapter {
     private Context context;
     String[] drawerObjects;
-    int[] images = {R.drawable.s_mapslogo, R.drawable.s_booklogo, R.drawable.xl_calendarlogo, R.drawable.s_settings, R.drawable.s_about, R.drawable.s_logout};
+    int[] images = {R.drawable.xl_maplogo, R.drawable.xl_bookinglogo, R.drawable.xl_calendarlogo, R.drawable.xl_settingslogo, R.drawable.xl_aboutlogo, R.drawable.xl_logoutlogo};
 
     public Myadapter(Context context) {
         this.context=context;
