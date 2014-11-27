@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,8 +39,9 @@ import java.util.List;
 public class CalenderActivity extends Activity {
 
     ListView lvDay;
-    TextView tvBookingTitle, tvBookingID, tvBookingDescription, tvBookingRoom, tvBookingPlacedDate, tvBookingTime, tvBookingDate;
+    TextView tvBooking;
     SharedPreferences userinfo;
+    Button btnAddUsers,btnDeleteBooking, btnBookingBack;
     String usernr;
     String[][] matrix;
     HttpPost httppost;
@@ -59,14 +61,19 @@ public class CalenderActivity extends Activity {
         userinfo = getSharedPreferences("userinfo", MODE_PRIVATE);
         usernr = userinfo.getString("userNumber", "");
         lvDay = (ListView)findViewById(R.id.lvDay);
-        tvBookingTitle = (TextView)findViewById(R.id.tvBookingTitle);
-        tvBookingID = (TextView)findViewById(R.id.tvBookingID);
-        tvBookingDescription = (TextView)findViewById(R.id.tvBookingDescription);
-        tvBookingRoom = (TextView)findViewById(R.id.tvBookingRoom);
-        tvBookingPlacedDate = (TextView)findViewById(R.id.tvBookingPlacedDate);
-        tvBookingTime = (TextView)findViewById(R.id.tvBookingTime);
-        tvBookingDate = (TextView)findViewById(R.id.tvBookingDate);
+        tvBooking = (TextView)findViewById(R.id.tvBooking);
+        btnAddUsers = (Button)findViewById(R.id.btnAddUsers);
+        btnDeleteBooking = (Button)findViewById(R.id.btnDeleteBooking);
+        btnBookingBack = (Button)findViewById(R.id.btnBookingBack);
+
+        tvBooking.setVisibility(View.VISIBLE);
+        btnAddUsers.setVisibility(View.VISIBLE);
+        btnDeleteBooking.setVisibility(View.VISIBLE);
+        btnBookingBack.setVisibility(View.VISIBLE);
+
         lvClick();
+        btnClick();
+
         dialog = ProgressDialog.show(this, "One moment please", "Fetching your calender");
         new Thread(new Runnable() {
             public void run() {
@@ -143,6 +150,32 @@ public class CalenderActivity extends Activity {
         arrayadapter();
     }
 
+    public void btnClick(){
+        btnBookingBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lvDay.setVisibility(View.VISIBLE);
+                tvBooking.setVisibility(View.GONE);
+                btnBookingBack.setVisibility(View.GONE);
+                btnDeleteBooking.setVisibility(View.GONE);
+                btnAddUsers.setVisibility(View.GONE);
+                tvBooking.setText("");
+            }
+        });
+
+        btnAddUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+        btnDeleteBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+    }
+
     public void lvClick(){
         lvDay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
@@ -152,18 +185,21 @@ public class CalenderActivity extends Activity {
                 System.out.println(strO[1]);
                 if(list.contains(strO[1])){
                     for(int i = 1 ; separated.length > i ; i++){
-                        if(strO[1] == matrix[i][1]){
+                        if(strO[1].equals(matrix[i][1])){
                             lvDay.setVisibility(View.GONE);
-                            tvBookingID.setText(matrix[i][0]);
-                            tvBookingTitle.setText(matrix[i][1]);
-                            tvBookingDescription.setText(matrix[i][2]);
-                            tvBookingRoom.setText(matrix[i][3]);
-                            tvBookingPlacedDate.setText(matrix[i][4] + " - " + matrix[i][5]);
-                            tvBookingTime.setText(matrix[i][6] + " - " + matrix[i][7]);
-                            tvBookingDate.setText(matrix[i][8]);
-                            Toast.makeText(CalenderActivity.this, "Changing screen", Toast.LENGTH_SHORT).show();
+                            tvBooking.setVisibility(View.VISIBLE);
+                            btnBookingBack.setVisibility(View.VISIBLE);
+                            btnDeleteBooking.setVisibility(View.VISIBLE);
+                            btnAddUsers.setVisibility(View.VISIBLE);
+                            String sourceString = "<b>" + "Booking ID:" + "</b><br> " + matrix[i][0] + "<br><br>" +
+                                    "<b>" + "Title:" + "</b><br> " + matrix[i][1] + "<br><br>" +
+                                    "<b>" + "Description:" + "</b><br> " + matrix[i][2] + "<br><br>" +
+                                    "<b>" + "Room:" + "</b><br> " + matrix[i][3] + "<br><br>" +
+                                    "<b>" + "Time and date booked:" + "</b><br> " +  matrix[i][4] + " - " + matrix[i][5] + "<br><br>" +
+                                    "<b>" + "Booking Time:" + "</b><br> " + matrix[i][6] + " - " + matrix[i][7] + "<br><br>" +
+                                    "<b>" + "Booking Date:" + "</b><br> " + matrix[i][8];
+                            tvBooking.setText(Html.fromHtml(sourceString));
                         }
-                        //Toast.makeText(CalenderActivity.this, "Changing screen", Toast.LENGTH_SHORT).show();
                     }
                 }
 
