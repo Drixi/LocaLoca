@@ -50,7 +50,7 @@ public class CalenderActivity extends Activity {
     Button btnAddUsers,btnDeleteBooking, btnBookingBack;
     String usernr, newUserNr;
     String[][] matrix;
-    String[] currentBookingSelected = new String[9];
+    String[] currentBookingSelected = new String[10];
     HttpPost httppost;
     StringBuffer buffer;
     String response;
@@ -58,7 +58,7 @@ public class CalenderActivity extends Activity {
     List<NameValuePair> nameValuePairs;
     List<String> lvlist = new ArrayList<String>();
     ProgressDialog dialog = null;
-    static String[] separated, getUserArray;
+    static String[] separated, getUserArray, deleteArray;
     ArrayList<String> list = new ArrayList<String>();
 
 
@@ -159,6 +159,32 @@ public class CalenderActivity extends Activity {
 
     }
 
+    public void deleteBooking(){
+        try{
+
+            httpclient=new DefaultHttpClient();
+            httppost= new HttpPost("http://pomsen.com/phpscripts/deleteBookingPOST.php");
+            nameValuePairs = new ArrayList<NameValuePair>(5);
+            nameValuePairs.add(new BasicNameValuePair("title",currentBookingSelected[1]));
+            nameValuePairs.add(new BasicNameValuePair("description",currentBookingSelected[2]));
+            nameValuePairs.add(new BasicNameValuePair("roomid",currentBookingSelected[3]));
+            nameValuePairs.add(new BasicNameValuePair("usernr",usernr));
+            nameValuePairs.add(new BasicNameValuePair("timebooked",currentBookingSelected[5]));
+            nameValuePairs.add(new BasicNameValuePair("datebooked",currentBookingSelected[6]));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            response = httpclient.execute(httppost, responseHandler);
+
+            Log.d("drixi", response);
+            deleteArray = response.split("#");
+
+        }catch(IOException e){
+            Log.e("drixi", "FEJLET");
+
+        }
+
+    }
+
     private void arrayadapter() {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
@@ -171,8 +197,8 @@ public class CalenderActivity extends Activity {
             lvlist.add(getDayString(i) + " " + getDateString(i));
             if(separated.length > 0) {
                 for (int n = 1; separated.length > n; n++) {
-                    if (getDateString(i).equals(matrix[n][8])) {
-                        lvlist.add(matrix[n][6] + " " + matrix[n][1] + " \n" + matrix[n][7] + " " + matrix[n][2]);
+                    if (getDateString(i).equals(matrix[n][9])) {
+                        lvlist.add(matrix[n][7] + " " + matrix[n][1] + " \n" + matrix[n][8] + " " + matrix[n][2]);
                         String[] temp = matrix[n][1].split(" ");
                         list.add(temp[0]);
                     }
@@ -198,13 +224,14 @@ public class CalenderActivity extends Activity {
         btnAddUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertbuilder();
+                alertbuilderAdd();
             }
         });
 
         btnDeleteBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                alertbuilderDelete();
             }
         });
     }
@@ -218,7 +245,7 @@ public class CalenderActivity extends Activity {
                 System.out.println(strO[1]);
                 if(list.contains(strO[1])){
                     for(int i = 1 ; separated.length > i ; i++){
-                        String temp = matrix[i][6] + " " + matrix[i][1] + " \n" + matrix[i][7] + " " + matrix[i][2];
+                        String temp = matrix[i][7] + " " + matrix[i][1] + " \n" + matrix[i][8] + " " + matrix[i][2];
                         if(o.toString().equals(temp)){
                             lvDay.setVisibility(View.GONE);
                             tvBooking.setVisibility(View.VISIBLE);
@@ -233,13 +260,15 @@ public class CalenderActivity extends Activity {
                             currentBookingSelected[6] = matrix[i][6];
                             currentBookingSelected[7] = matrix[i][7];
                             currentBookingSelected[8] = matrix[i][8];
+                            currentBookingSelected[9] = matrix[i][9];
                             String sourceString = "<b>" + "Booking ID:" + "</b><br> " + matrix[i][0] + "<br><br>" +
                                     "<b>" + "Title:" + "</b><br> " + matrix[i][1] + "<br><br>" +
                                     "<b>" + "Description:" + "</b><br> " + matrix[i][2] + "<br><br>" +
                                     "<b>" + "Room:" + "</b><br> " + matrix[i][3] + "<br><br>" +
-                                    "<b>" + "Time and date booked:" + "</b><br> " +  matrix[i][4] + " - " + matrix[i][5] + "<br><br>" +
-                                    "<b>" + "Booking Time:" + "</b><br> " + matrix[i][6] + " - " + matrix[i][7] + "<br><br>" +
-                                    "<b>" + "Booking Date:" + "</b><br> " + matrix[i][8];
+                                    "<b>" + "Creator:" + "</b><br> " + matrix[i][4] + "<br><br>" +
+                                    "<b>" + "Time and date booked:" + "</b><br> " +  matrix[i][5] + " - " + matrix[i][6] + "<br><br>" +
+                                    "<b>" + "Booking Time:" + "</b><br> " + matrix[i][7] + " - " + matrix[i][8] + "<br><br>" +
+                                    "<b>" + "Booking Date:" + "</b><br> " + matrix[i][9] + "<br>";
                             tvBooking.setText(Html.fromHtml(sourceString));
                         }
                     }
@@ -249,7 +278,7 @@ public class CalenderActivity extends Activity {
         });
     }
 
-    public void alertbuilder(){
+    public void alertbuilderAdd(){
         AlertDialog.Builder builder = new AlertDialog.Builder(CalenderActivity.this);
         final EditText input = new EditText(CalenderActivity.this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -267,7 +296,7 @@ public class CalenderActivity extends Activity {
                                 dialog.cancel();
                             }
                         })
-                .setNegativeButton("Yes",
+                .setNegativeButton("Add",
                         new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog, int id) {
                                 if(input.getText().toString().length() < 8){
@@ -277,6 +306,48 @@ public class CalenderActivity extends Activity {
                                     newUserNr = input.getText().toString();
                                     addUserToBooking();
                                 }
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void alertbuilderDelete(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CalenderActivity.this);
+        builder.setMessage("Are you sure you want to delete this booking?")
+                .setCancelable(false)
+                .setTitle("Delete booking")
+                .setPositiveButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, int id) {
+                                new Thread(new Runnable() {
+                                    public void run() {
+                                        deleteBooking();
+
+                                    }
+                                }).start();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(deleteArray.length > 0) {
+                                            if (deleteArray[1].equals("Success")) {
+                                                Toast.makeText(CalenderActivity.this, "Booking deleted", Toast.LENGTH_SHORT).show();
+                                                recreate();
+                                            } else if (deleteArray[1].equals("No")){
+                                                Toast.makeText(CalenderActivity.this,
+                                                        "You are not the creator of this event, get the creator to delete it", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(CalenderActivity.this, "Deletion failed. Check your connection", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }, 1500);
                             }
                         });
         AlertDialog alert = builder.create();
@@ -299,21 +370,25 @@ public class CalenderActivity extends Activity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    dbanswers Answer = dbanswers.valueOf(getUserArray[1]);
-                    switch (Answer){
-                        case Fail:
-                            Toast.makeText(CalenderActivity.this, "No user with that number", Toast.LENGTH_SHORT).show();
-                            break;
-                        case Userhas:
-                            Toast.makeText(CalenderActivity.this, "User is already on this booking", Toast.LENGTH_SHORT).show();
-                            break;
-                        case Error:
-                            Toast.makeText(CalenderActivity.this, "Booking failed, please check connection", Toast.LENGTH_SHORT).show();
-                            break;
-                        case Success:
-                            Toast.makeText(CalenderActivity.this, "User succesfully added to booking", Toast.LENGTH_SHORT).show();
-                            break;
+                    if(getUserArray.length > 0) {
+                        dbanswers Answer = dbanswers.valueOf(getUserArray[1]);
+                        switch (Answer) {
+                            case Fail:
+                                Toast.makeText(CalenderActivity.this, "No user with that number", Toast.LENGTH_SHORT).show();
+                                break;
+                            case Userhas:
+                                Toast.makeText(CalenderActivity.this, "User is already on this booking", Toast.LENGTH_SHORT).show();
+                                break;
+                            case Error:
+                                Toast.makeText(CalenderActivity.this, "Booking failed, please check connection", Toast.LENGTH_SHORT).show();
+                                break;
+                            case Success:
+                                Toast.makeText(CalenderActivity.this, "User succesfully added to booking", Toast.LENGTH_SHORT).show();
+                                break;
 
+                        }
+                    } else {
+                        Toast.makeText(CalenderActivity.this, "Adding failed, check your connection", Toast.LENGTH_SHORT).show();
                     }
                     dialog.dismiss();
                 }

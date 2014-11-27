@@ -392,8 +392,8 @@ public class BookingActivity extends Activity{
                     Toast.makeText(BookingActivity.this, "Starting time cannot be before ending time", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    if (TextUtils.isEmpty(stretTitle) || TextUtils.isEmpty(stretDescription)) {
-                        Toast.makeText(BookingActivity.this, "Title or Description is missing", Toast.LENGTH_SHORT).show();
+                    if (TextUtils.isEmpty(stretTitle) || TextUtils.isEmpty(stretDescription) || RoomChosen.equals("")) {
+                        Toast.makeText(BookingActivity.this, "Room, Title or Description is missing", Toast.LENGTH_SHORT).show();
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(BookingActivity.this);
                         builder.setMessage("Title: " + etTitle.getText().toString() + "\nDescription: " +
@@ -488,7 +488,7 @@ public class BookingActivity extends Activity{
             System.out.println(roomid);
             httpclient=new DefaultHttpClient();
             httppost= new HttpPost("http://pomsen.com/phpscripts/placebookingPOST.php");
-            nameValuePairs = new ArrayList<NameValuePair>(9);
+            nameValuePairs = new ArrayList<NameValuePair>(10);
             nameValuePairs.add(new BasicNameValuePair("usernr", usernr.replaceAll("'", "")));
             nameValuePairs.add(new BasicNameValuePair("title", etTitle.getText().toString().replaceAll("'", "")));
             nameValuePairs.add(new BasicNameValuePair("description",etDescription.getText().toString().replaceAll("'", "")));
