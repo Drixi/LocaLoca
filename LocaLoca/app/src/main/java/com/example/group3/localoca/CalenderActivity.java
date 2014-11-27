@@ -31,6 +31,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,6 +45,7 @@ public class CalenderActivity extends Activity {
     Button btnAddUsers,btnDeleteBooking, btnBookingBack;
     String usernr;
     String[][] matrix;
+    String[] currentBookingSelected = new String[9];
     HttpPost httppost;
     StringBuffer buffer;
     String response;
@@ -66,10 +68,10 @@ public class CalenderActivity extends Activity {
         btnDeleteBooking = (Button)findViewById(R.id.btnDeleteBooking);
         btnBookingBack = (Button)findViewById(R.id.btnBookingBack);
 
-        tvBooking.setVisibility(View.VISIBLE);
-        btnAddUsers.setVisibility(View.VISIBLE);
-        btnDeleteBooking.setVisibility(View.VISIBLE);
-        btnBookingBack.setVisibility(View.VISIBLE);
+        tvBooking.setVisibility(View.GONE);
+        btnAddUsers.setVisibility(View.GONE);
+        btnDeleteBooking.setVisibility(View.GONE);
+        btnBookingBack.setVisibility(View.GONE);
 
         lvClick();
         btnClick();
@@ -128,6 +130,47 @@ public class CalenderActivity extends Activity {
 
     }
 
+    /*public void makeBooking(){
+        try{
+            SimpleDateFormat sdftime = new SimpleDateFormat("HH:mm");
+            String currentTime = sdftime.format(new Date());
+            SimpleDateFormat sdfdate = new SimpleDateFormat("dd/MM/yyyy");
+            String currentDate = sdfdate.format(new Date());
+            String roomid = buildingID + "." +
+                    floorID + "." + RoomChosen.toString().replaceAll(" .*", "");
+            String date = String.valueOf(dpBookDate.getDayOfMonth())+"/"+
+                    String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+            System.out.println(roomid);
+            httpclient=new DefaultHttpClient();
+            httppost= new HttpPost("http://pomsen.com/phpscripts/placebookingPOST.php");
+            nameValuePairs = new ArrayList<NameValuePair>(9);
+            nameValuePairs.add(new BasicNameValuePair("usernr", usernr.replaceAll("'", "")));
+            nameValuePairs.add(new BasicNameValuePair("title", etTitle.getText().toString().replaceAll("'", "")));
+            nameValuePairs.add(new BasicNameValuePair("description",etDescription.getText().toString().replaceAll("'", "")));
+            nameValuePairs.add(new BasicNameValuePair("roomid",roomid.replaceAll("'", "")));
+            nameValuePairs.add(new BasicNameValuePair("timeofbooking",currentTime.replaceAll("'", "")));
+            nameValuePairs.add(new BasicNameValuePair("dateofbooking",currentDate.replaceAll("'", "")));
+            nameValuePairs.add(new BasicNameValuePair("timestart",TimeStartChosen.toString().replaceAll("'", "")));
+            nameValuePairs.add(new BasicNameValuePair("timeend",TimeEndChosen.toString().replaceAll("'", "")));
+            nameValuePairs.add(new BasicNameValuePair("date", date.replaceAll("'", "")));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            response = httpclient.execute(httppost, responseHandler);
+
+            Log.d("drixi", response);
+            separated = response.split("#");
+            for (int i = 0; i < separated.length; ++i) {
+                list.add(separated[i]);
+            }
+
+
+
+        }catch(IOException e){
+            Log.e("drixi", "FEJLET");
+
+        }
+    }*/
+
     private void arrayadapter() {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
@@ -142,7 +185,8 @@ public class CalenderActivity extends Activity {
                 for (int n = 1; separated.length > n; n++) {
                     if (getDateString(i).equals(matrix[n][8])) {
                         lvlist.add(matrix[n][6] + " " + matrix[n][1] + " \n" + matrix[n][7] + " " + matrix[n][2]);
-                        list.add(matrix[n][1]);
+                        String[] temp = matrix[n][1].split(" ");
+                        list.add(temp[0]);
                     }
                 }
             }
@@ -166,6 +210,7 @@ public class CalenderActivity extends Activity {
         btnAddUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             }
         });
 
@@ -185,12 +230,21 @@ public class CalenderActivity extends Activity {
                 System.out.println(strO[1]);
                 if(list.contains(strO[1])){
                     for(int i = 1 ; separated.length > i ; i++){
-                        if(strO[1].equals(matrix[i][1])){
+                        String temp = matrix[i][6] + " " + matrix[i][1] + " \n" + matrix[i][7] + " " + matrix[i][2];
+                        if(o.toString().equals(temp)){
                             lvDay.setVisibility(View.GONE);
                             tvBooking.setVisibility(View.VISIBLE);
                             btnBookingBack.setVisibility(View.VISIBLE);
                             btnDeleteBooking.setVisibility(View.VISIBLE);
                             btnAddUsers.setVisibility(View.VISIBLE);
+                            currentBookingSelected[1] = matrix[i][1];
+                            currentBookingSelected[2] = matrix[i][2];
+                            currentBookingSelected[3] = matrix[i][3];
+                            currentBookingSelected[4] = matrix[i][4];
+                            currentBookingSelected[5] = matrix[i][5];
+                            currentBookingSelected[6] = matrix[i][6];
+                            currentBookingSelected[7] = matrix[i][7];
+                            currentBookingSelected[8] = matrix[i][8];
                             String sourceString = "<b>" + "Booking ID:" + "</b><br> " + matrix[i][0] + "<br><br>" +
                                     "<b>" + "Title:" + "</b><br> " + matrix[i][1] + "<br><br>" +
                                     "<b>" + "Description:" + "</b><br> " + matrix[i][2] + "<br><br>" +
