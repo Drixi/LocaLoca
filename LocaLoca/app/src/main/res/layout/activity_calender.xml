@@ -3,6 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lvDay" />
+
+
     <ScrollView
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -19,34 +25,29 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lvDay" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvBooking"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvBooking"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Add someone to the booking"
+                    android:id="@+id/btnAddUsers" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add someone to the booking"
-        android:id="@+id/btnAddUsers" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Delete booking"
+                    android:id="@+id/btnDeleteBooking" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete booking"
-        android:id="@+id/btnDeleteBooking" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back to calender"
-        android:id="@+id/btnBookingBack" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Back to calender"
+                    android:id="@+id/btnBookingBack" />
 
             </LinearLayout>
         </LinearLayout>
