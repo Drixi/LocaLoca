@@ -1,18 +1,23 @@
 package com.example.group3.localoca;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.text.InputType;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +48,7 @@ public class CalenderActivity extends Activity {
     TextView tvBooking;
     SharedPreferences userinfo;
     Button btnAddUsers,btnDeleteBooking, btnBookingBack;
-    String usernr;
+    String usernr, newUserNr;
     String[][] matrix;
     String[] currentBookingSelected = new String[9];
     HttpPost httppost;
@@ -53,8 +58,9 @@ public class CalenderActivity extends Activity {
     List<NameValuePair> nameValuePairs;
     List<String> lvlist = new ArrayList<String>();
     ProgressDialog dialog = null;
-    static String[] separated;
+    static String[] separated, getUserArray;
     ArrayList<String> list = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,46 +136,28 @@ public class CalenderActivity extends Activity {
 
     }
 
-    /*public void makeBooking(){
+    public void getUserAndPlaceBooking(){
         try{
-            SimpleDateFormat sdftime = new SimpleDateFormat("HH:mm");
-            String currentTime = sdftime.format(new Date());
-            SimpleDateFormat sdfdate = new SimpleDateFormat("dd/MM/yyyy");
-            String currentDate = sdfdate.format(new Date());
-            String roomid = buildingID + "." +
-                    floorID + "." + RoomChosen.toString().replaceAll(" .*", "");
-            String date = String.valueOf(dpBookDate.getDayOfMonth())+"/"+
-                    String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
-            System.out.println(roomid);
+
             httpclient=new DefaultHttpClient();
-            httppost= new HttpPost("http://pomsen.com/phpscripts/placebookingPOST.php");
-            nameValuePairs = new ArrayList<NameValuePair>(9);
-            nameValuePairs.add(new BasicNameValuePair("usernr", usernr.replaceAll("'", "")));
-            nameValuePairs.add(new BasicNameValuePair("title", etTitle.getText().toString().replaceAll("'", "")));
-            nameValuePairs.add(new BasicNameValuePair("description",etDescription.getText().toString().replaceAll("'", "")));
-            nameValuePairs.add(new BasicNameValuePair("roomid",roomid.replaceAll("'", "")));
-            nameValuePairs.add(new BasicNameValuePair("timeofbooking",currentTime.replaceAll("'", "")));
-            nameValuePairs.add(new BasicNameValuePair("dateofbooking",currentDate.replaceAll("'", "")));
-            nameValuePairs.add(new BasicNameValuePair("timestart",TimeStartChosen.toString().replaceAll("'", "")));
-            nameValuePairs.add(new BasicNameValuePair("timeend",TimeEndChosen.toString().replaceAll("'", "")));
-            nameValuePairs.add(new BasicNameValuePair("date", date.replaceAll("'", "")));
+            httppost= new HttpPost("http://pomsen.com/phpscripts/getUserAndPlaceBookingPOST.php");
+            nameValuePairs = new ArrayList<NameValuePair>(3);
+            nameValuePairs.add(new BasicNameValuePair("usernr",newUserNr));
+            nameValuePairs.add(new BasicNameValuePair("oldusernr",usernr));
+            nameValuePairs.add(new BasicNameValuePair("title",currentBookingSelected[1]));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             response = httpclient.execute(httppost, responseHandler);
 
             Log.d("drixi", response);
-            separated = response.split("#");
-            for (int i = 0; i < separated.length; ++i) {
-                list.add(separated[i]);
-            }
-
-
+            getUserArray = response.split("#");
 
         }catch(IOException e){
             Log.e("drixi", "FEJLET");
 
         }
-    }*/
+
+    }
 
     private void arrayadapter() {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
@@ -210,7 +198,7 @@ public class CalenderActivity extends Activity {
         btnAddUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                alertbuilder();
             }
         });
 
@@ -260,5 +248,76 @@ public class CalenderActivity extends Activity {
             }
         });
     }
+
+    public void alertbuilder(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CalenderActivity.this);
+        final EditText input = new EditText(CalenderActivity.this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        builder.setView(input);
+        builder.setMessage("Please add the user number of the person you want to add")
+                .setCancelable(false)
+                .setTitle("Add additional person")
+                .setPositiveButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, int id) {
+                                if(input.getText().toString().length() < 8){
+                                    Toast.makeText(CalenderActivity.this,
+                                            "Please enter a valid user number", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    newUserNr = input.getText().toString();
+                                    addUserToBooking();
+                                }
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private enum dbanswers {
+        Fail, Userhas, Error, Success;
+    }
+
+    public void addUserToBooking(){
+
+        dialog = ProgressDialog.show(CalenderActivity.this, "One moment please", "Adding person to booking");
+            new Thread(new Runnable() {
+                public void run() {
+                    getUserAndPlaceBooking();
+
+                }
+            }).start();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dbanswers Answer = dbanswers.valueOf(getUserArray[1]);
+                    switch (Answer){
+                        case Fail:
+                            Toast.makeText(CalenderActivity.this, "No user with that number", Toast.LENGTH_SHORT).show();
+                            break;
+                        case Userhas:
+                            Toast.makeText(CalenderActivity.this, "User is already on this booking", Toast.LENGTH_SHORT).show();
+                            break;
+                        case Error:
+                            Toast.makeText(CalenderActivity.this, "Booking failed, please check connection", Toast.LENGTH_SHORT).show();
+                            break;
+                        case Success:
+                            Toast.makeText(CalenderActivity.this, "User succesfully added to booking", Toast.LENGTH_SHORT).show();
+                            break;
+
+                    }
+                    dialog.dismiss();
+                }
+            }, 1500);
+        }
 
 }
