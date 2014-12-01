@@ -41,7 +41,7 @@ import java.util.List;
 public class BookingActivity extends Activity{
 
     SharedPreferences userinfo;
-    String usernr;
+    String usernr, username;
     int buildingID, floorID;
 
     HttpPost httppost;
@@ -77,6 +77,7 @@ public class BookingActivity extends Activity{
 
         userinfo = getSharedPreferences("userinfo", MODE_PRIVATE);
         usernr = userinfo.getString("userNumber", "");
+        username = userinfo.getString("userName", "");
 
         btnCheckDate = (Button)findViewById(R.id.btnCheckDate);
         tvBookBuilding = (TextView)findViewById(R.id.tvBookBuilding);
@@ -251,10 +252,15 @@ public class BookingActivity extends Activity{
                             TimeChoicesEnd.add(i + ":00");
                         }
                         if (separated[1].equals("Fail") != true) {
-
-                            for (int j = 1; separated.length > j; j++) {
-                                String userDate = String.valueOf(dpBookDate.getDayOfMonth()) + "/" +
+                            String userDate;
+                            if(dpBookDate.getDayOfMonth() < 10){
+                                userDate = String.valueOf("0"+dpBookDate.getDayOfMonth()) + "/" +
                                         String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
+                            } else {
+                                userDate = String.valueOf(dpBookDate.getDayOfMonth()) + "/" +
+                                        String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
+                            }
+                            for (int j = 1; separated.length > j; j++) {
                                 String serverDate = matrix[j][4];
                                 if(userDate.equals(serverDate)) {
                                     int serverTimeStart = Integer.valueOf(matrix[j][2].replaceAll(":.*", ""));
@@ -338,39 +344,38 @@ public class BookingActivity extends Activity{
                         etTitle.setVisibility(View.VISIBLE);
                         etDescription.setVisibility(View.VISIBLE);
                     }  else {
+                        btnSubmitBooking.setVisibility(View.VISIBLE);
+                        etTitle.setVisibility(View.VISIBLE);
+                        etDescription.setVisibility(View.VISIBLE);
                                 for(int i=1; separated.length > i; i++) {
-                                    int userTimeStart = Integer.valueOf(TimeStartChosen.toString().replaceAll(":.*", ""));
-                                    int userTimeEnd = Integer.valueOf(TimeEndChosen.toString().replaceAll(":.*", ""));
-                                    int serverTimeStart = Integer.valueOf(matrix[i][2].replaceAll(":.*", ""));
-                                    int serverTimeEnd = Integer.valueOf(matrix[i][3].replaceAll(":.*", ""));
-                                    String userDate = String.valueOf(dpBookDate.getDayOfMonth()) + "/" +
-                                            String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
-                                    String serverDate = matrix[i][4];
-                                    if(serverDate.equals(userDate)) {
-                                        if (userTimeStart < serverTimeStart && serverTimeEnd < userTimeEnd) {
-                                            Toast.makeText(BookingActivity.this, "Booking has already been placed, please choose another one\n"
-                                                    + "\nTitle: " + matrix[i][1] + "\nDate: " + matrix[i][4] + "\nTime starting: " + matrix[i][2] +
-                                                    "\nTime Ending: " + matrix[i][3], Toast.LENGTH_LONG).show();
-                                            btnSubmitBooking.setVisibility(View.INVISIBLE);
-                                            etTitle.setVisibility(View.INVISIBLE);
-                                            etDescription.setVisibility(View.INVISIBLE);
+                                        int userTimeStart = Integer.valueOf(TimeStartChosen.toString().replaceAll(":.*", ""));
+                                        int userTimeEnd = Integer.valueOf(TimeEndChosen.toString().replaceAll(":.*", ""));
+                                        int serverTimeStart = Integer.valueOf(matrix[i][2].replaceAll(":.*", ""));
+                                        int serverTimeEnd = Integer.valueOf(matrix[i][3].replaceAll(":.*", ""));
+                                        String userDate;
+                                        if(dpBookDate.getDayOfMonth() < 10){
+                                            userDate = String.valueOf("0"+dpBookDate.getDayOfMonth()) + "/" +
+                                                    String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
+                                        } else {
+                                            userDate = String.valueOf(dpBookDate.getDayOfMonth()) + "/" +
+                                                    String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
+                                        }
 
-                                        }/* else {
-                                            btnSubmitBooking.setVisibility(View.VISIBLE);
-                                            etTitle.setVisibility(View.VISIBLE);
-                                            etDescription.setVisibility(View.VISIBLE);
-                                        }*/
-                                    }/*else {
-                                        btnSubmitBooking.setVisibility(View.VISIBLE);
-                                        etTitle.setVisibility(View.VISIBLE);
-                                        etDescription.setVisibility(View.VISIBLE);
-                                    }*/
+                                        String serverDate = matrix[i][4];
+                                        if(serverDate.equals(userDate)) {
+                                            if (userTimeStart < serverTimeStart && serverTimeEnd < userTimeEnd) {
+                                                Toast.makeText(BookingActivity.this, "Booking has already been placed, please choose another one\n"
+                                                        + "\nTitle: " + matrix[i][1] + "\nDate: " + matrix[i][4] + "\nTime starting: " + matrix[i][2] +
+                                                        "\nTime Ending: " + matrix[i][3], Toast.LENGTH_LONG).show();
+                                                btnSubmitBooking.setVisibility(View.INVISIBLE);
+                                                etTitle.setVisibility(View.INVISIBLE);
+                                                etDescription.setVisibility(View.INVISIBLE);
+
+                                            }
+                                        }
                                     }
                                     dialog.dismiss();
                                 }
-                    btnSubmitBooking.setVisibility(View.VISIBLE);
-                    etTitle.setVisibility(View.VISIBLE);
-                    etDescription.setVisibility(View.VISIBLE);
                 }
                 iCurrentSelection = position;
             }
@@ -385,6 +390,7 @@ public class BookingActivity extends Activity{
         btnSubmitBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSubmitBooking.setEnabled(false);
                 String stretTitle = etTitle.getText().toString();
                 String stretDescription = etDescription.getText().toString();
                 if (Integer.valueOf(TimeStartChosen.toString().replaceAll(":.*", "")) >
@@ -394,6 +400,7 @@ public class BookingActivity extends Activity{
                 } else {
                     if (TextUtils.isEmpty(stretTitle) || TextUtils.isEmpty(stretDescription) || RoomChosen.equals("")) {
                         Toast.makeText(BookingActivity.this, "Room, Title or Description is missing", Toast.LENGTH_SHORT).show();
+                        btnSubmitBooking.setEnabled(true);
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(BookingActivity.this);
                         builder.setMessage("Title: " + etTitle.getText().toString() + "\nDescription: " +
@@ -432,6 +439,7 @@ public class BookingActivity extends Activity{
                                                             Toast.makeText(BookingActivity.this, "Booking failed, please check your connection"
                                                                     , Toast.LENGTH_SHORT).show();
                                                         }
+                                                        btnSubmitBooking.setEnabled(true);
                                                     }
                                                 }, 1500);
 
@@ -481,15 +489,24 @@ public class BookingActivity extends Activity{
             String currentTime = sdftime.format(new Date());
             SimpleDateFormat sdfdate = new SimpleDateFormat("dd/MM/yyyy");
             String currentDate = sdfdate.format(new Date());
+            String date;
+            /*String roomid = buildingID + "." +
+                    floorID + "." + RoomChosen.toString().replaceAll(" .*", "");*/
             String roomid = buildingID + "." +
-                    floorID + "." + RoomChosen.toString().replaceAll(" .*", "");
-            String date = String.valueOf(dpBookDate.getDayOfMonth())+"/"+
-                    String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+                    floorID + "." + RoomChosen.toString();
+            if(dpBookDate.getDayOfMonth() < 10){
+                date = String.valueOf("0" + dpBookDate.getDayOfMonth())+"/"+
+                        String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+            } else {
+                date = String.valueOf(dpBookDate.getDayOfMonth())+"/"+
+                        String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+            }
             System.out.println(roomid);
             httpclient=new DefaultHttpClient();
             httppost= new HttpPost("http://pomsen.com/phpscripts/placebookingPOST.php");
             nameValuePairs = new ArrayList<NameValuePair>(10);
             nameValuePairs.add(new BasicNameValuePair("usernr", usernr.replaceAll("'", "")));
+            nameValuePairs.add(new BasicNameValuePair("username", username.replaceAll("'", "")));
             nameValuePairs.add(new BasicNameValuePair("title", etTitle.getText().toString().replaceAll("'", "")));
             nameValuePairs.add(new BasicNameValuePair("description",etDescription.getText().toString().replaceAll("'", "")));
             nameValuePairs.add(new BasicNameValuePair("roomid",roomid.replaceAll("'", "")));
@@ -522,8 +539,10 @@ public class BookingActivity extends Activity{
             httpclient=new DefaultHttpClient();
             httppost= new HttpPost("http://pomsen.com/phpscripts/getExistingBookingsPOST.php");
             nameValuePairs = new ArrayList<NameValuePair>(1);
+            /*String roomid = buildingID + "." +
+                    floorID + "." + RoomChosen.toString().replaceAll(" .*", "");*/
             String roomid = buildingID + "." +
-                    floorID + "." + RoomChosen.toString().replaceAll(" .*", "");
+                    floorID + "." + RoomChosen.toString();
             nameValuePairs.add(new BasicNameValuePair("roomid", roomid));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
