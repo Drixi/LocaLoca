@@ -2,7 +2,6 @@ package com.example.group3.localoca;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,8 @@ public class MainMenuFragment extends Fragment {
     Toast backtoast;
     ImageView logo;
     private MapFragment buttonMap;
-    private BookingFragment buttonbooking;
+    private BookingFragment buttonBooking;
+    private CalenderFragment buttonCalendar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,26 +50,19 @@ public class MainMenuFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                buttonbooking = new BookingFragment();
+                buttonBooking = new BookingFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.contentFrame, buttonbooking).commit();
+                ft.replace(R.id.contentFrame, buttonBooking).commit();
             }
         });
 
-        // Top left button
-        btn_main_3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent switchtoregister = new Intent(v.getContext(), DrawerActivity.class);
-                startActivity(switchtoregister);
-            }
-        });
         // Top right button
         btn_main_4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent switchtoregister = new Intent(v.getContext(), CalenderActivity.class);
-                startActivity(switchtoregister);
+                buttonCalendar = new CalenderFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contentFrame, buttonCalendar).commit();
             }
         });
         return rootView;

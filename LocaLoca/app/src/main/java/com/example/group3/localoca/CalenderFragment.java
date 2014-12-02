@@ -1,27 +1,27 @@
 package com.example.group3.localoca;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.text.InputType;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,13 +39,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Asbjørn on 03-11-2014.
  */
-public class CalenderActivity extends Activity {
+public class CalenderFragment extends Fragment {
 
     float x1,x2;
     float y1, y2;
@@ -71,19 +70,21 @@ public class CalenderActivity extends Activity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calender);
-        userinfo = getSharedPreferences("userinfo", MODE_PRIVATE);
-        usernr = userinfo.getString("userNumber", "");
-        username = userinfo.getString("userName", "");
-        lvDay = (ListView)findViewById(R.id.lvDay);
-        tvBooking = (TextView)findViewById(R.id.tvBooking);
-        thisui = (LinearLayout)findViewById(R.id.thisui);
-        tvDate = (TextView)findViewById(R.id.tvDate);
-        btnAddUsers = (Button)findViewById(R.id.btnAddUsers);
-        btnDeleteBooking = (Button)findViewById(R.id.btnDeleteBooking);
-        btnBookingBack = (Button)findViewById(R.id.btnBookingBack);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_calender, container, false);
+
+        SharedPreferences pref = getActivity().getPreferences(0);
+        usernr = pref.getString("userNumber", "");
+        username = pref.getString("userName", "");
+
+        lvDay = (ListView) rootView.findViewById(R.id.lvDay);
+        tvBooking = (TextView) rootView.findViewById(R.id.tvBooking);
+        thisui = (LinearLayout) rootView.findViewById(R.id.thisui);
+        tvDate = (TextView) rootView.findViewById(R.id.tvDate);
+        btnAddUsers = (Button) rootView.findViewById(R.id.btnAddUsers);
+        btnDeleteBooking = (Button) rootView.findViewById(R.id.btnDeleteBooking);
+        btnBookingBack = (Button) rootView.findViewById(R.id.btnBookingBack);
 
         tvBooking.setVisibility(View.GONE);
         btnAddUsers.setVisibility(View.GONE);
@@ -93,7 +94,7 @@ public class CalenderActivity extends Activity {
         lvClick();
         btnClick();
 
-        dialog = ProgressDialog.show(this, "One moment please", "Fetching your calender");
+        dialog = ProgressDialog.show(getActivity(), "One moment please", "Fetching your calender");
         new Thread(new Runnable() {
             public void run() {
                 getUserBookings();
@@ -107,6 +108,7 @@ public class CalenderActivity extends Activity {
                 dialog.dismiss();
             }
         }, 1500);
+        return rootView;
     }
 
     private String getDateString(int days) {
@@ -199,7 +201,7 @@ public class CalenderActivity extends Activity {
 
     private void arrayadapter() {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
+                getActivity(),
                 android.R.layout.simple_list_item_1, lvlist);
         lvDay.setAdapter(arrayAdapter);
     }
@@ -297,8 +299,8 @@ public class CalenderActivity extends Activity {
     }
 
     public void alertbuilderAdd(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(CalenderActivity.this);
-        final EditText input = new EditText(CalenderActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final EditText input = new EditText(getActivity());
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -318,7 +320,7 @@ public class CalenderActivity extends Activity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(final DialogInterface dialog, int id) {
                                 if(input.getText().toString().length() < 8){
-                                    Toast toast = Toast.makeText(CalenderActivity.this, "Please insert a valid user nr", Toast.LENGTH_LONG);
+                                    Toast toast = Toast.makeText(getActivity(), "Please insert a valid user nr", Toast.LENGTH_LONG);
                                     toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
                                     toast.show();
                                 } else {
@@ -333,7 +335,7 @@ public class CalenderActivity extends Activity {
 
     public void alertbuilderDelete(){
         if(usernr.equals(currentBookingSelected[4])) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CalenderActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("Are you sure you want to delete this booking?")
                     .setCancelable(false)
                     .setTitle("Delete booking")
@@ -357,11 +359,13 @@ public class CalenderActivity extends Activity {
                                         public void run() {
                                             if (deleteArray.length > 0) {
                                                 if (deleteArray[1].equals("Success")) {
-                                                    Toast.makeText(CalenderActivity.this, "Booking deleted", Toast.LENGTH_SHORT).show();
-                                                    recreate();
+                                                    Toast.makeText(getActivity(), "Booking deleted", Toast.LENGTH_SHORT).show();
+                                                    CalenderFragment CalendarFragment = new CalenderFragment();
+                                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                                    ft.replace(R.id.contentFrame, CalendarFragment).commit();
                                                 }
                                             } else {
-                                                Toast.makeText(CalenderActivity.this, "Deletion failed. Check your connection", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(), "Deletion failed. Check your connection", Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     }, 1500);
@@ -370,7 +374,7 @@ public class CalenderActivity extends Activity {
             AlertDialog alert = builder.create();
             alert.show();
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CalenderActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("Are you sure you want to remove yourself from this booking?")
                     .setCancelable(false)
                     .setTitle("Remove booking")
@@ -394,11 +398,13 @@ public class CalenderActivity extends Activity {
                                         public void run() {
                                             if(deleteArray.length > 0) {
                                                 if (deleteArray[1].equals("Success")) {
-                                                    Toast.makeText(CalenderActivity.this, "Booking deleted", Toast.LENGTH_SHORT).show();
-                                                    recreate();
+                                                    Toast.makeText(getActivity(), "Booking deleted", Toast.LENGTH_SHORT).show();
+                                                    CalenderFragment CalendarFragment = new CalenderFragment();
+                                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                                    ft.replace(R.id.contentFrame, CalendarFragment).commit();
                                                 }
                                             } else {
-                                                Toast.makeText(CalenderActivity.this, "Deletion failed. Check your connection", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(), "Deletion failed. Check your connection", Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     }, 1500);
@@ -416,7 +422,7 @@ public class CalenderActivity extends Activity {
 
     public void addUserToBooking(){
 
-        dialog = ProgressDialog.show(CalenderActivity.this, "One moment please", "Adding person to booking");
+        dialog = ProgressDialog.show(getActivity(), "One moment please", "Adding person to booking");
             new Thread(new Runnable() {
                 public void run() {
                     getUserAndPlaceBooking();
@@ -430,29 +436,29 @@ public class CalenderActivity extends Activity {
                         dbanswers Answer = dbanswers.valueOf(getUserArray[1]);
                         switch (Answer) {
                             case Fail:
-                                Toast toast = Toast.makeText(CalenderActivity.this, "No user with that number", Toast.LENGTH_LONG);
+                                Toast toast = Toast.makeText(getActivity(), "No user with that number", Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
                                 toast.show();
                                 break;
                             case Userhas:
-                                toast = Toast.makeText(CalenderActivity.this, "User is already on this booking", Toast.LENGTH_LONG);
+                                toast = Toast.makeText(getActivity(), "User is already on this booking", Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
                                 toast.show();
                                 break;
                             case Error:
-                                toast = Toast.makeText(CalenderActivity.this, "Booking failed, please check connection", Toast.LENGTH_LONG);
+                                toast = Toast.makeText(getActivity(), "Booking failed, please check connection", Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
                                 toast.show();
                                 break;
                             case Success:
-                                toast = Toast.makeText(CalenderActivity.this, "User succesfully added to booking", Toast.LENGTH_LONG);
+                                toast = Toast.makeText(getActivity(), "User succesfully added to booking", Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
                                 toast.show();
                                 break;
 
                         }
                     } else {
-                        Toast toast = Toast.makeText(CalenderActivity.this, "Adding failed. Check your connection", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getActivity(), "Adding failed. Check your connection", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
                         toast.show();
                     }
@@ -481,7 +487,7 @@ public class CalenderActivity extends Activity {
                     {
                         week = week - 7;
                         lvRoomsPopulate();
-                        Toast.makeText(CalenderActivity.this, "Changed one week backwards", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Changed one week backwards", Toast.LENGTH_SHORT).show();
                     }
 
                     // if right to left sweep event on screen
@@ -489,7 +495,7 @@ public class CalenderActivity extends Activity {
                     {
                         week = week + 7;
                         lvRoomsPopulate();
-                        Toast.makeText(CalenderActivity.this, "Changed one week forward", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Changed one week forward", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 }

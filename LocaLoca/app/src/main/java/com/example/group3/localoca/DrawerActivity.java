@@ -36,7 +36,7 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.drawer);
+        setContentView(R.layout.drawer_activity_layout);
         userinfo = getSharedPreferences("userinfo", MODE_PRIVATE);
 
         if (savedInstanceState == null) {
@@ -150,7 +150,7 @@ class Myadapter extends BaseAdapter {
         View row = null;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.c_drawer_layout, parent, Boolean.parseBoolean(null));
+            row = inflater.inflate(R.layout.drawer_layout, parent, Boolean.parseBoolean(null));
         }
         else {
             row = convertView;
