@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,8 @@ public class CalenderActivity extends Activity {
     int week = 0;
 
     ListView lvDay;
-    TextView tvBooking, tvDate;
+    TextView tvBooking, tvDate ;
+    LinearLayout thisui;
     SharedPreferences userinfo;
     Button btnAddUsers,btnDeleteBooking, btnBookingBack;
     String usernr, newUserNr, username;
@@ -77,6 +79,7 @@ public class CalenderActivity extends Activity {
         username = userinfo.getString("userName", "");
         lvDay = (ListView)findViewById(R.id.lvDay);
         tvBooking = (TextView)findViewById(R.id.tvBooking);
+        thisui = (LinearLayout)findViewById(R.id.thisui);
         tvDate = (TextView)findViewById(R.id.tvDate);
         btnAddUsers = (Button)findViewById(R.id.btnAddUsers);
         btnDeleteBooking = (Button)findViewById(R.id.btnDeleteBooking);
@@ -203,7 +206,8 @@ public class CalenderActivity extends Activity {
 
     private void lvRoomsPopulate(){
         lvlist.clear();
-        tvDate.setText("<   "  + getDateString(week) + "-" + getDateString(week + 7) + "   >");
+        //tvDate.setText("<   "  + getDateString(week) + "-" + getDateString(week + 7) + "   >");
+        tvDate.setText(getDateString(week) + "-" + getDateString(week + 7));
         for(int i = 0; i<7; i++){
             lvlist.add(getDayString(i + week) + " " + getDateString(i + week));
             if(separated.length > 0) {
@@ -223,8 +227,7 @@ public class CalenderActivity extends Activity {
         btnBookingBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tvDate.setVisibility(View.VISIBLE);
-                lvDay.setVisibility(View.VISIBLE);
+                thisui.setVisibility(View.VISIBLE);
                 tvBooking.setVisibility(View.GONE);
                 btnBookingBack.setVisibility(View.GONE);
                 btnDeleteBooking.setVisibility(View.GONE);
@@ -259,8 +262,7 @@ public class CalenderActivity extends Activity {
                     for(int i = 1 ; separated.length > i ; i++){
                         String temp = matrix[i][7] + " " + matrix[i][1] + " \n" + matrix[i][8] + " " + matrix[i][2];
                         if(o.toString().equals(temp)){
-                            tvDate.setVisibility(View.GONE);
-                            lvDay.setVisibility(View.GONE);
+                            thisui.setVisibility(View.GONE);
                             tvBooking.setVisibility(View.VISIBLE);
                             btnBookingBack.setVisibility(View.VISIBLE);
                             btnDeleteBooking.setVisibility(View.VISIBLE);
@@ -475,28 +477,24 @@ public class CalenderActivity extends Activity {
                     x2 = touchevent.getX();
                     y2 = touchevent.getY();
 
-                    //if left to right sweep event on screen
-                    /*if (x1 < x2)
-                    {
-                        Toast.makeText(this, "Left to Right Swap Performed", Toast.LENGTH_LONG).show();
-                    }*/
-
                     if (x2 - x1 > 200)
                     {
                         week = week - 7;
-                        System.out.println("Week :" + week);
                         lvRoomsPopulate();
+                        Toast.makeText(CalenderActivity.this, "Changed one week backwards", Toast.LENGTH_SHORT).show();
                     }
 
                     // if right to left sweep event on screen
                     if (x1 - x2 > 200)
                     {
                         week = week + 7;
-                        System.out.println("Week :" + week);
                         lvRoomsPopulate();
+                        Toast.makeText(CalenderActivity.this, "Changed one week forward", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 }
+                case MotionEvent.ACTION_MOVE:
+                break;
             }
             return false;
         }
