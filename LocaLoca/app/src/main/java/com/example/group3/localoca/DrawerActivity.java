@@ -1,19 +1,18 @@
 package com.example.group3.localoca;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -30,17 +29,33 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     private String[] drawerObjects;
     private ActionBarDrawerToggle drawerListener;
     private Myadapter myAdapter;
+    private MainMenuFragment contentView;
+    private Toast backtoast;
+    SharedPreferences userinfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer);
+        userinfo = getSharedPreferences("userinfo", MODE_PRIVATE);
+
+        if (savedInstanceState == null) {
+            contentView = new MainMenuFragment();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(R.id.contentFrame, contentView).commit();
+        }
+
         drawerLayout=(DrawerLayout) findViewById(R.id.drawerlayout);
         listView =(ListView) findViewById(R.id.drawerList);
         myAdapter = new Myadapter(this);
         listView.setAdapter(myAdapter);
         listView.setOnItemClickListener(this);
-        drawerListener= new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close ){
+        drawerLayout.setDrawerListener(drawerListener);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        drawerListener= new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer,
+                R.string.drawer_open, R.string.drawer_close ){
             @Override
             public void onDrawerClosed(View drawerView) {
                 Toast.makeText(DrawerActivity.this, "Drawer Closed", Toast.LENGTH_SHORT).show();
@@ -51,11 +66,6 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
                 Toast.makeText(DrawerActivity.this, "Drawer Opened", Toast.LENGTH_SHORT).show();
             }
         };
-        drawerLayout.setDrawerListener(drawerListener);
-
-        drawerLayout.setDrawerListener(drawerListener);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -66,6 +76,20 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    public void onBackPressed() {
+        //if(USER_IS_GOING_TO_EXIT) {
+        if(backtoast!=null&&backtoast.getView().getWindowToken()!=null) {
+            finish();
+        } else {
+            backtoast = Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT);
+            backtoast.show();
+        }
+        // } else {
+        //   //other stuff...
+        // super.onBackPressed();
+        //}
     }
 
     @Override

@@ -18,21 +18,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapFragment"
-            android:theme="@style/AppTheme"
-            android:label="Room List" >
-        </activity>
-        <activity
-            android:name=".ITE_MainMenu"
-            android:theme="@style/AppTheme"
-            android:label="Main Menu">
-        </activity>
-        <activity
             android:name=".CalenderActivity"
             android:label="Calender">
         </activity>
         <activity
-            android:name=".BookingActivity"
+            android:name=".BookingFragment"
             android:label="Booking">
         </activity>
         <activity
