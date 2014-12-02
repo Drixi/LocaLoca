@@ -13,6 +13,7 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -45,8 +46,12 @@ import java.util.List;
  */
 public class CalenderActivity extends Activity {
 
+    float x1,x2;
+    float y1, y2;
+    int week = 0;
+
     ListView lvDay;
-    TextView tvBooking;
+    TextView tvBooking, tvDate;
     SharedPreferences userinfo;
     Button btnAddUsers,btnDeleteBooking, btnBookingBack;
     String usernr, newUserNr, username;
@@ -72,6 +77,7 @@ public class CalenderActivity extends Activity {
         username = userinfo.getString("userName", "");
         lvDay = (ListView)findViewById(R.id.lvDay);
         tvBooking = (TextView)findViewById(R.id.tvBooking);
+        tvDate = (TextView)findViewById(R.id.tvDate);
         btnAddUsers = (Button)findViewById(R.id.btnAddUsers);
         btnDeleteBooking = (Button)findViewById(R.id.btnDeleteBooking);
         btnBookingBack = (Button)findViewById(R.id.btnBookingBack);
@@ -196,11 +202,13 @@ public class CalenderActivity extends Activity {
     }
 
     private void lvRoomsPopulate(){
+        lvlist.clear();
+        tvDate.setText("<   "  + getDateString(week) + "-" + getDateString(week + 7) + "   >");
         for(int i = 0; i<7; i++){
-            lvlist.add(getDayString(i) + " " + getDateString(i));
+            lvlist.add(getDayString(i + week) + " " + getDateString(i + week));
             if(separated.length > 0) {
                 for (int n = 1; separated.length > n; n++) {
-                    if (getDateString(i).equals(matrix[n][9])) {
+                    if (getDateString(i + week).equals(matrix[n][9])) {
                         lvlist.add(matrix[n][7] + " " + matrix[n][1] + " \n" + matrix[n][8] + " " + matrix[n][2]);
                         String[] temp = matrix[n][1].split(" ");
                         list.add(temp[0]);
@@ -215,6 +223,7 @@ public class CalenderActivity extends Activity {
         btnBookingBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tvDate.setVisibility(View.VISIBLE);
                 lvDay.setVisibility(View.VISIBLE);
                 tvBooking.setVisibility(View.GONE);
                 btnBookingBack.setVisibility(View.GONE);
@@ -250,6 +259,7 @@ public class CalenderActivity extends Activity {
                     for(int i = 1 ; separated.length > i ; i++){
                         String temp = matrix[i][7] + " " + matrix[i][1] + " \n" + matrix[i][8] + " " + matrix[i][2];
                         if(o.toString().equals(temp)){
+                            tvDate.setVisibility(View.GONE);
                             lvDay.setVisibility(View.GONE);
                             tvBooking.setVisibility(View.VISIBLE);
                             btnBookingBack.setVisibility(View.VISIBLE);
@@ -447,6 +457,48 @@ public class CalenderActivity extends Activity {
                     dialog.dismiss();
                 }
             }, 1500);
+        }
+
+        public boolean onTouchEvent(MotionEvent touchevent)
+        {
+            switch (touchevent.getAction())
+            {
+                // when user first touches the screen we get x and y coordinate
+                case MotionEvent.ACTION_DOWN:
+                {
+                    x1 = touchevent.getX();
+                    y1 = touchevent.getY();
+                    break;
+                }
+                case MotionEvent.ACTION_UP:
+                {
+                    x2 = touchevent.getX();
+                    y2 = touchevent.getY();
+
+                    //if left to right sweep event on screen
+                    /*if (x1 < x2)
+                    {
+                        Toast.makeText(this, "Left to Right Swap Performed", Toast.LENGTH_LONG).show();
+                    }*/
+
+                    if (x2 - x1 > 200)
+                    {
+                        week = week - 7;
+                        System.out.println("Week :" + week);
+                        lvRoomsPopulate();
+                    }
+
+                    // if right to left sweep event on screen
+                    if (x1 - x2 > 200)
+                    {
+                        week = week + 7;
+                        System.out.println("Week :" + week);
+                        lvRoomsPopulate();
+                    }
+                    break;
+                }
+            }
+            return false;
         }
 
 }
