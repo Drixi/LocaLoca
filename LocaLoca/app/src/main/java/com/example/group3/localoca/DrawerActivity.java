@@ -1,8 +1,11 @@
 package com.example.group3.localoca;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -110,6 +113,33 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     public void onItemClick(AdapterView<?> parent, View view, int position,
         long id ) {
         selectItem(position);
+        System.out.println(position);
+        switch(position) {
+            case 0:
+                MapFragment buttonMap = new MapFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contentFrame, buttonMap).addToBackStack("tag").commit();
+                break;
+            case 1:
+                BookingFragment buttonBooking = new BookingFragment();
+                ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contentFrame, buttonBooking, "booking").commit();
+                break;
+            case 2:
+                CalenderFragment buttonCalendar = new CalenderFragment();
+                ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contentFrame, buttonCalendar).commit();
+                break;
+            case 3:
+                Toast.makeText(DrawerActivity.this, "This feature is currently disabled", Toast.LENGTH_SHORT).show();
+                break;
+            case 4:
+                Toast.makeText(DrawerActivity.this, "This feature is currently disabled", Toast.LENGTH_SHORT).show();
+                break;
+            case 5:
+                alertbuilderLogout();
+                break;
+        }
     }
 
     public void selectItem(int position){
@@ -118,6 +148,31 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
 
     public void setTitle(String title){
         getSupportActionBar().setTitle(title);
+    }
+
+    public void alertbuilderLogout(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(DrawerActivity.this);
+        builder.setMessage("Are you sure you want to log out")
+                .setCancelable(false)
+                .setTitle("Log out")
+                .setPositiveButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, int id) {
+                                SharedPreferences settings = DrawerActivity.this.getSharedPreferences("userinfo", Context.MODE_PRIVATE);
+                                settings.edit().clear().commit();
+                                Toast.makeText(DrawerActivity.this, "User logged out", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(DrawerActivity.this, LoginActivity.class));
+                                finish();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }
