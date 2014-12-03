@@ -1,5 +1,6 @@
 package com.example.group3.localoca;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -32,6 +33,7 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     private MainMenuFragment contentView;
     private Toast backtoast;
     SharedPreferences userinfo;
+    private MainMenuFragment MainMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +60,10 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
                 R.string.drawer_open, R.string.drawer_close ){
             @Override
             public void onDrawerClosed(View drawerView) {
-                Toast.makeText(DrawerActivity.this, "Drawer Closed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                Toast.makeText(DrawerActivity.this, "Drawer Opened", Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -79,18 +79,20 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     }
 
     public void onBackPressed() {
-        //if(USER_IS_GOING_TO_EXIT) {
+        contentView = new MainMenuFragment();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.contentFrame, contentView).commit();
+    }
+
+    /*public void onBackPressed() {
+
         if(backtoast!=null&&backtoast.getView().getWindowToken()!=null) {
             finish();
         } else {
             backtoast = Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT);
             backtoast.show();
         }
-        // } else {
-        //   //other stuff...
-        // super.onBackPressed();
-        //}
-    }
+    }*/
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

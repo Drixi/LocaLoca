@@ -2,7 +2,9 @@ package com.example.group3.localoca;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +29,12 @@ public class MainMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_menu, container, false);
+
         btn_main_1 = (Button) rootView.findViewById(R.id.btn_main1);
         btn_main_2 = (Button) rootView.findViewById(R.id.btn_main2);
         btn_main_3 = (Button) rootView.findViewById(R.id.btn_main3);
         btn_main_4 = (Button) rootView.findViewById(R.id.btn_main4);
         logo = (ImageView) rootView.findViewById(R.id.img_menu_logo);
-
 
         // Bottom left button
         btn_main_1.setOnClickListener(new View.OnClickListener() {
@@ -41,7 +43,7 @@ public class MainMenuFragment extends Fragment {
             public void onClick(View v) {
                 buttonMap = new MapFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.contentFrame, buttonMap).commit();
+                ft.replace(R.id.contentFrame, buttonMap).addToBackStack("tag").commit();
             }
         });
 
@@ -52,7 +54,7 @@ public class MainMenuFragment extends Fragment {
             public void onClick(View v) {
                 buttonBooking = new BookingFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.contentFrame, buttonBooking).commit();
+                ft.replace(R.id.contentFrame, buttonBooking, "booking").commit();
             }
         });
 
