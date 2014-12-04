@@ -28,23 +28,21 @@
             android:id="@+id/btn_main1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginRight="@dimen/button_margin"
-            android:layout_marginBottom="@dimen/button_margin"
             android:layout_marginTop="@dimen/button_margin"
             android:layout_marginLeft="@dimen/button_margin"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@drawable/mapslogo"/>
+            android:background="@drawable/map_icon_sq"/>
 
         <Button
             android:id="@+id/btn_main2"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginRight="@dimen/button_margin"
-            android:layout_marginBottom="@dimen/button_margin"
             android:layout_marginTop="@dimen/button_margin"
-            android:layout_marginLeft="@dimen/button_margin"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:background="@drawable/booklogo"/>
+            android:background="@drawable/booking_icon_sq"/>
     </LinearLayout>
 
     <LinearLayout
@@ -57,23 +55,21 @@
             android:id="@+id/btn_main3"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginRight="@dimen/button_margin"
-            android:layout_marginBottom="@dimen/button_margin"
             android:layout_marginTop="@dimen/button_margin"
             android:layout_marginLeft="@dimen/button_margin"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@drawable/search_icon"/>
+            android:background="@drawable/search_icon_sq"/>
 
         <Button
             android:id="@+id/btn_main4"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginRight="@dimen/button_margin"
-            android:layout_marginBottom="@dimen/button_margin"
             android:layout_marginTop="@dimen/button_margin"
-            android:layout_marginLeft="@dimen/button_margin"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:background="@drawable/calendarlogo"/>
+            android:background="@drawable/calendar_icon_sq"/>
     </LinearLayout>
 
 </LinearLayout>
