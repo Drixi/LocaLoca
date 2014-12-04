@@ -66,7 +66,7 @@ public class CalenderFragment extends Fragment {
     List<NameValuePair> nameValuePairs;
     List<String> lvlist = new ArrayList<String>();
     ProgressDialog dialog = null;
-    static String[] separated, getUserArray, deleteArray;
+    String[] separated, getUserArray, deleteArray;
     ArrayList<String> list = new ArrayList<String>();
 
 
@@ -109,8 +109,16 @@ public class CalenderFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                lvRoomsPopulate();
-                dialog.dismiss();
+                if(separated != null) {
+                    lvRoomsPopulate();
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(getActivity(), "Fetching calender failed, check your connection", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    MainMenuFragment contentView = new MainMenuFragment();
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.replace(R.id.contentFrame, contentView).commit();
+                }
             }
         }, 1500);
         return rootView;

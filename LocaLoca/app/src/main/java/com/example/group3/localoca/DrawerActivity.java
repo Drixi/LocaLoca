@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +40,7 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     private Toast backtoast;
     SharedPreferences userinfo;
     private MainMenuFragment MainMenu;
+    boolean dOpen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,15 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        drawerLayout.openDrawer(Gravity.START);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                drawerLayout.closeDrawer(Gravity.START);
+            }
+        }, 1500);
+
         drawerListener= new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer,
                 R.string.drawer_open, R.string.drawer_close ){
             @Override
@@ -80,6 +93,20 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if(dOpen != true) {
+                dOpen = true;
+                drawerLayout.openDrawer(Gravity.START);
+                return true;
+            } else {
+                dOpen = false;
+                drawerLayout.closeDrawer(Gravity.START);
+            }
+        }
+        return super.onKeyUp(keyCode, event);
     }
 
     public void onBackPressed() {
