@@ -7,6 +7,7 @@
     <string name="title_activity_main_window">MainWindow</string>
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigatuin Drawer</string>
+    <string name="build_version">Build v0.6.3.2</string>
 
     <color name="App_BG">#ff000000</color>
     <color name="Btn_main">#7D7D7D</color>

@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.BoolRes;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,9 +34,10 @@ import java.util.List;
 
 
 public class LoginActivity extends Activity {
-    private Button loginBtn;
+    private Button loginBtn, btnforgot;
     private EditText etUser, etPassword;
     private CheckBox saveLoginCheckBox;
+    private Layout loading_animation;
     HttpPost httppost;
     StringBuffer buffer;
     String response;
@@ -69,11 +70,6 @@ public class LoginActivity extends Activity {
         etUser = (EditText)findViewById(R.id.etUser);
         etPassword = (EditText)findViewById(R.id.etPassword);
         saveLoginCheckBox = (CheckBox)findViewById(R.id.saveLoginCheckBox);
-        //ImageView loadingGif = (ImageView)findViewById(R.id.ivLoadingGif);
-        //loadingGif.setBackgroundResource(R.drawable.loading_small);
-        //AnimationDrawable frameAnimation = (AnimationDrawable) loadingGif.getBackground();
-        //frameAnimation.start();
-        btnPressed();
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
@@ -81,6 +77,7 @@ public class LoginActivity extends Activity {
         if (saveLogin == true) {
             saveLoginCheckBox.setChecked(true);
         }
+        btnPressed();
     }
 
     @Override
@@ -113,6 +110,7 @@ public class LoginActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void btnPressed() {
         loginBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -120,6 +118,7 @@ public class LoginActivity extends Activity {
             public void onClick(View v) {
                     updatePreferences();
                 if(etUser.getText().length() > 0 && etPassword.getText().length() > 0){
+
                     dialog = ProgressDialog.show(LoginActivity.this, "",
                             "Validating user...", true);
                     new Thread(new Runnable() {

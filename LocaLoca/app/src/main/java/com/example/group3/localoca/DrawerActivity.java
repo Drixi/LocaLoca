@@ -131,7 +131,9 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
                 Toast.makeText(DrawerActivity.this, "This feature is currently disabled", Toast.LENGTH_SHORT).show();
                 break;
             case 5:
-                Toast.makeText(DrawerActivity.this, "This feature is currently disabled", Toast.LENGTH_SHORT).show();
+                AboutFragment buttonAbout = new AboutFragment();
+                ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contentFrame, buttonAbout, "about").commit();
                 break;
             case 6:
                 alertbuilderLogout();

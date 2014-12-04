@@ -214,7 +214,7 @@ public class CalenderFragment extends Fragment {
     private void lvRoomsPopulate(){
         lvlist.clear();
         //tvDate.setText("<   "  + getDateString(week) + "-" + getDateString(week + 7) + "   >");
-        tvDate.setText(getDateString(week) + "-" + getDateString(week + 7));
+        tvDate.setText(getDateString(week) + " - " + getDateString(week + 7));
         for(int i = 0; i<7; i++){
             lvlist.add(getDayString(i + week) + " " + getDateString(i + week));
             if(separated.length > 0) {
