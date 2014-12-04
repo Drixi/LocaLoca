@@ -14,6 +14,7 @@
     <color name="direct_mblue">#8ED7D6</color>
 
     <string-array name="drawerObjets">
+        <item >Home</item>
         <item >Map</item>
         <item >Bookings</item>
         <item >Calendar</item>

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -54,7 +55,7 @@ public class CalenderFragment extends Fragment {
     TextView tvBooking, tvDate ;
     LinearLayout thisui;
     SharedPreferences userinfo;
-    Button btnAddUsers,btnDeleteBooking, btnBookingBack;
+    Button btnAddUsers,btnDeleteBooking, btnBookingBack, btnBack, btnForward, btnFindRoom;
     String usernr, newUserNr, username;
     String[][] matrix;
     String[] currentBookingSelected = new String[10];
@@ -74,7 +75,7 @@ public class CalenderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_calender, container, false);
 
-        SharedPreferences pref = getActivity().getPreferences(0);
+        SharedPreferences pref = getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         usernr = pref.getString("userNumber", "");
         username = pref.getString("userName", "");
 
@@ -85,6 +86,10 @@ public class CalenderFragment extends Fragment {
         btnAddUsers = (Button) rootView.findViewById(R.id.btnAddUsers);
         btnDeleteBooking = (Button) rootView.findViewById(R.id.btnDeleteBooking);
         btnBookingBack = (Button) rootView.findViewById(R.id.btnBookingBack);
+        btnBack = (Button) rootView.findViewById(R.id.btnBack);
+        btnForward = (Button) rootView.findViewById(R.id.btnForward);
+        btnFindRoom = (Button) rootView.findViewById(R.id.btnFindRoom);
+
 
         tvBooking.setVisibility(View.GONE);
         btnAddUsers.setVisibility(View.GONE);
@@ -251,6 +256,33 @@ public class CalenderFragment extends Fragment {
                 alertbuilderDelete();
             }
         });
+
+        btnFindRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast toast = Toast.makeText(getActivity(), "This feature is currently disabled", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+                toast.show();
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                week = week - 7;
+                lvRoomsPopulate();
+                Toast.makeText(getActivity(), "Changed one week backwards", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnForward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                week = week + 7;
+                lvRoomsPopulate();
+                Toast.makeText(getActivity(), "Changed one week forward", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void lvClick(){
@@ -278,16 +310,17 @@ public class CalenderFragment extends Fragment {
                             currentBookingSelected[7] = matrix[i][7];
                             currentBookingSelected[8] = matrix[i][8];
                             currentBookingSelected[9] = matrix[i][9];
-                            String sourceString = "<b>" + "Booking ID:" + "</b><br> " + matrix[i][0] + "<br><br>" +
+                            String sourceString =
                                     "<b>" + "Title:" + "</b><br> " + matrix[i][1] + "<br><br>" +
                                     "<b>" + "Description:" + "</b><br> " + matrix[i][2] + "<br><br>" +
                                     "<b>" + "Room:" + "</b><br> " + matrix[i][3] + "<br><br>" +
-                                    "<b>" + "Creator:" + "</b><br> " + matrix[i][4].replaceAll("1|2|3|4|5|6|7|8|9|0|-", "") + "<br><br>" +
-                                    "<b>" + "Time and date booked:" + "</b><br> " +  matrix[i][5] + " - " + matrix[i][6] + "<br><br>" +
+                                    "<b>" + "Booking Date:" + "</b><br> " + matrix[i][9] + "<br><br>" +
                                     "<b>" + "Booking Time:" + "</b><br> " + matrix[i][7] + " - " + matrix[i][8] + "<br><br>" +
-                                    "<b>" + "Booking Date:" + "</b><br> " + matrix[i][9] + "<br>";
+                                    "<b>" + "Creator:" + "</b><br> " + matrix[i][4].replaceAll("1|2|3|4|5|6|7|8|9|0|-", "") + "<br><br>" +
+                                    "<b>" + "Time and date booked:" + "</b><br> " +  matrix[i][5] + " - " + matrix[i][6] + "<br><br>";
                             tvBooking.setText(Html.fromHtml(sourceString));
                             if(usernr.equals(currentBookingSelected[4]) == false){
+                                btnAddUsers.setEnabled(false);
                                 btnDeleteBooking.setText("Remove me from this booking");
                             }
                         }

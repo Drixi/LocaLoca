@@ -64,6 +64,12 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/sRoom" />
 
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="See room on map"
+                    android:id="@+id/btnBookingSeeOnMap" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

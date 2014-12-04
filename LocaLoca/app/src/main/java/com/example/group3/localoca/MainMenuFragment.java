@@ -2,12 +2,14 @@ package com.example.group3.localoca;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -35,6 +37,7 @@ public class MainMenuFragment extends Fragment {
         btn_main_3 = (Button) rootView.findViewById(R.id.btn_main3);
         btn_main_4 = (Button) rootView.findViewById(R.id.btn_main4);
         logo = (ImageView) rootView.findViewById(R.id.img_menu_logo);
+        hideKeyboard();
 
         // Bottom left button
         btn_main_1.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +61,14 @@ public class MainMenuFragment extends Fragment {
             }
         });
 
+        btn_main_3.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "This feature is currently disabled", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // Top right button
         btn_main_4.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,5 +79,14 @@ public class MainMenuFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 }

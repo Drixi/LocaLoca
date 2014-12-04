@@ -75,6 +75,7 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     public boolean onOptionsItemSelected(MenuItem item) {
         if(drawerListener.onOptionsItemSelected(item))
         {
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -86,16 +87,6 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.contentFrame, contentView).commit();
     }
-
-    /*public void onBackPressed() {
-
-        if(backtoast!=null&&backtoast.getView().getWindowToken()!=null) {
-            finish();
-        } else {
-            backtoast = Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT);
-            backtoast.show();
-        }
-    }*/
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -114,29 +105,35 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
         long id ) {
         selectItem(position);
         System.out.println(position);
+        drawerLayout.closeDrawers();
         switch(position) {
             case 0:
-                MapFragment buttonMap = new MapFragment();
+                contentView = new MainMenuFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.contentFrame, buttonMap).addToBackStack("tag").commit();
+                ft.replace(R.id.contentFrame, contentView).commit();
                 break;
             case 1:
+                MapFragment buttonMap = new MapFragment();
+                ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contentFrame, buttonMap).addToBackStack("tag").commit();
+                break;
+            case 2:
                 BookingFragment buttonBooking = new BookingFragment();
                 ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.contentFrame, buttonBooking, "booking").commit();
                 break;
-            case 2:
+            case 3:
                 CalenderFragment buttonCalendar = new CalenderFragment();
                 ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.contentFrame, buttonCalendar).commit();
-                break;
-            case 3:
-                Toast.makeText(DrawerActivity.this, "This feature is currently disabled", Toast.LENGTH_SHORT).show();
                 break;
             case 4:
                 Toast.makeText(DrawerActivity.this, "This feature is currently disabled", Toast.LENGTH_SHORT).show();
                 break;
             case 5:
+                Toast.makeText(DrawerActivity.this, "This feature is currently disabled", Toast.LENGTH_SHORT).show();
+                break;
+            case 6:
                 alertbuilderLogout();
                 break;
         }
@@ -180,7 +177,7 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
 class Myadapter extends BaseAdapter {
     private Context context;
     String[] drawerObjects;
-    int[] images = {R.drawable.xl_maplogo, R.drawable.xl_bookinglogo, R.drawable.xl_calendarlogo, R.drawable.xl_settingslogo, R.drawable.xl_aboutlogo, R.drawable.xl_logoutlogo};
+    int[] images = {R.drawable.xl_homelogo, R.drawable.xl_maplogo, R.drawable.xl_bookinglogo, R.drawable.xl_calendarlogo, R.drawable.xl_settingslogo, R.drawable.xl_aboutlogo, R.drawable.xl_logoutlogo};
 
     public Myadapter(Context context) {
         this.context=context;

@@ -18,7 +18,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&lt;"
+                android:background="@drawable/arrowback"
                 android:id="@+id/btnBack" />
 
             <TextView
@@ -33,7 +33,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=">"
+                android:background="@drawable/arrow"
                 android:id="@+id/btnForward" />
 
         </LinearLayout>
@@ -72,6 +72,12 @@
                     android:layout_height="wrap_content"
                     android:text="Add someone to the booking"
                     android:id="@+id/btnAddUsers" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Find room on map"
+                    android:id="@+id/btnFindRoom" />
 
                 <Button
                     android:layout_width="match_parent"
