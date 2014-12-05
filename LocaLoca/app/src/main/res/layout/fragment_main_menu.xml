@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dlmainmenu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,65 +11,58 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:background="@color/App_BG">
 
+    <Space android:id="@+id/patdummy"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
 
     <ImageView
         android:id="@+id/img_menu_logo"
-        android:layout_width="fill_parent"
-        android:layout_height="180dp"
-        android:background="@drawable/logo_direct"/>
+        android:layout_width="283dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/logo_direct"
+        android:layout_centerHorizontal="true"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1">
+    <Button
+        android:id="@+id/btn_main1"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginRight="@dimen/menu_button_margin"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/img_menu_logo"
+        android:layout_toLeftOf="@+id/patdummy"
+        android:background="@drawable/map_icon_sq"/>
 
-        <Button
-            android:id="@+id/btn_main1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="@dimen/button_margin"
-            android:layout_marginLeft="@dimen/button_margin"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/map_icon_sq"/>
+    <Button
+        android:id="@+id/btn_main2"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginLeft="@dimen/menu_button_margin"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/img_menu_logo"
+        android:layout_toRightOf="@+id/patdummy"
+        android:background="@drawable/booking_icon_sq"/>
 
-        <Button
-            android:id="@+id/btn_main2"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginRight="@dimen/button_margin"
-            android:layout_marginTop="@dimen/button_margin"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/booking_icon_sq"/>
-    </LinearLayout>
+    <Button
+        android:id="@+id/btn_main3"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginRight="@dimen/menu_button_margin"
+        android:layout_marginTop="@dimen/menu_button_margin"
+        android:layout_below="@+id/btn_main1"
+        android:layout_toLeftOf="@+id/patdummy"
+        android:background="@drawable/search_icon_sq"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1">
+    <Button
+        android:id="@+id/btn_main4"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="@dimen/menu_button_height"
+        android:layout_marginLeft="@dimen/menu_button_margin"
+        android:layout_marginTop="@dimen/menu_button_margin"
+        android:layout_below="@+id/btn_main2"
+        android:layout_toRightOf="@+id/patdummy"
+        android:background="@drawable/calendar_icon_sq"/>
 
-        <Button
-            android:id="@+id/btn_main3"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="@dimen/button_margin"
-            android:layout_marginLeft="@dimen/button_margin"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/search_icon_sq"/>
-
-        <Button
-            android:id="@+id/btn_main4"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginRight="@dimen/button_margin"
-            android:layout_marginTop="@dimen/button_margin"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/calendar_icon_sq"/>
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
