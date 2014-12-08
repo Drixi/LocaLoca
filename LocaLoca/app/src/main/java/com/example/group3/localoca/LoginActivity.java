@@ -119,8 +119,14 @@ public class LoginActivity extends Activity {
                     updatePreferences();
                 if(etUser.getText().length() > 0 && etPassword.getText().length() > 0){
 
-                    dialog = ProgressDialog.show(LoginActivity.this, "",
-                            "Validating user...", true);
+//                    dialog = ProgressDialog.show(LoginActivity.this, "",
+//                            "Validating user...", true);
+                    dialog = new ProgressDialog(LoginActivity.this);
+                    dialog.setCancelable(true);
+                    dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    dialog.setIndeterminate(true);
+                    dialog.setIndeterminateDrawable(LoginActivity.this.getResources().getDrawable(R.drawable.loading_frames));
+                    dialog.show();
                     new Thread(new Runnable() {
                         public void run() {
                             logindb();

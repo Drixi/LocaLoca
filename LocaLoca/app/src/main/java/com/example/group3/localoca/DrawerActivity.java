@@ -1,7 +1,6 @@
 package com.example.group3.localoca;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -71,6 +70,9 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
                 drawerLayout.closeDrawer(Gravity.START);
             }
         }, 1500);
+
+
+
 
         drawerListener= new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer,
                 R.string.drawer_open, R.string.drawer_close ){
