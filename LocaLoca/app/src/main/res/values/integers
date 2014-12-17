@@ -3,7 +3,7 @@
 
     <integer
         name="loading_time"
-        >50</integer>
+        >5</integer>
 
 
 </resources>
