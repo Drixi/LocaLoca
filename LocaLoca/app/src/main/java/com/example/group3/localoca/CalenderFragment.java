@@ -90,7 +90,8 @@ public class CalenderFragment extends Fragment {
         btnForward = (Button) rootView.findViewById(R.id.btnForward);
         btnFindRoom = (Button) rootView.findViewById(R.id.btnFindRoom);
 
-
+        btnForward.setVisibility(View.GONE);
+        btnBack.setVisibility(View.GONE);
         tvBooking.setVisibility(View.GONE);
         btnAddUsers.setVisibility(View.GONE);
         btnDeleteBooking.setVisibility(View.GONE);
@@ -114,6 +115,8 @@ public class CalenderFragment extends Fragment {
                 if(separated != null) {
                     lvRoomsPopulate();
                     dialog.dismiss();
+                    btnBack.setVisibility(View.VISIBLE);
+                    btnForward.setVisibility(View.VISIBLE);
                 } else {
                     Toast.makeText(getActivity(), "Fetching calender failed, check your connection", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();

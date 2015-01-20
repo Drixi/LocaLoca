@@ -120,7 +120,7 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
         };
 
         mPendingIntent = PendingIntent.getActivity(
-                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                this, 0, new Intent(this, DrawerActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         handleIntent(getIntent());
 
