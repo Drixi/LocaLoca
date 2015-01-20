@@ -99,6 +99,8 @@ public class CalenderFragment extends Fragment {
         lvClick();
         btnClick();
 
+        System.out.println(getDateString(0));
+
         dialog = ProgressDialog.show(getActivity(), "One moment please", "Fetching your calender");
         new Thread(new Runnable() {
             public void run() {
@@ -227,6 +229,7 @@ public class CalenderFragment extends Fragment {
             lvlist.add(getDayString(i + week) + " " + getDateString(i + week));
             if(separated.length > 0) {
                 for (int n = 1; separated.length > n; n++) {
+                    System.out.println(getDateString(i + week)+ " = " + matrix[n][9]);
                     if (getDateString(i + week).equals(matrix[n][9])) {
                         lvlist.add(matrix[n][7] + " " + matrix[n][1] + " \n" + matrix[n][8] + " " + matrix[n][2]);
                         String[] temp = matrix[n][1].split(" ");

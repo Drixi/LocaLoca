@@ -546,13 +546,23 @@ public class BookingFragment extends Fragment{
                     floorID + "." + RoomChosen.toString().replaceAll(" .*", "");*/
             String roomid = buildingID + "." +
                     floorID + "." + RoomChosen.toString();
-            if(dpBookDate.getDayOfMonth() < 10){
+            if(dpBookDate.getDayOfMonth() < 10 && dpBookDate.getMonth() < 10){
+                date = String.valueOf("0" + dpBookDate.getDayOfMonth())+"/0"+
+                        String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+            }
+            else if(dpBookDate.getDayOfMonth() < 10){
                 date = String.valueOf("0" + dpBookDate.getDayOfMonth())+"/"+
                         String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
-            } else {
+            }
+            else if(dpBookDate.getMonth() < 10){
+                date = String.valueOf(dpBookDate.getDayOfMonth())+"/0"+
+                        String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+            }
+            else {
                 date = String.valueOf(dpBookDate.getDayOfMonth())+"/"+
                         String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
             }
+
             System.out.println(roomid);
             httpclient=new DefaultHttpClient();
             httppost= new HttpPost("http://pomsen.com/phpscripts/placebookingPOST.php");
