@@ -3,21 +3,20 @@ package com.example.group3.localoca;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.AnimationDrawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -35,8 +34,10 @@ import java.util.List;
 
 
 public class LoginActivity extends Activity {
-    private Button loginBtn;
+    private Button loginBtn, btnforgot;
     private EditText etUser, etPassword;
+    private CheckBox saveLoginCheckBox;
+    private Layout loading_animation;
     HttpPost httppost;
     StringBuffer buffer;
     String response;
@@ -46,6 +47,19 @@ public class LoginActivity extends Activity {
     static String[] separated;
     ArrayList<String> list = new ArrayList<String>();
     SharedPreferences userinfo;
+    private Boolean saveLogin;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+
+    private static final String PREFS_NAME = "preferences";
+    private static final String PREF_UNAME = "Username";
+    private static final String PREF_PASSWORD = "Password";
+
+    private final String DefaultUnameValue = "";
+    private String UnameValue;
+
+    private final String DefaultPasswordValue = "";
+    private String PasswordValue;
 
 
     @Override
@@ -55,11 +69,27 @@ public class LoginActivity extends Activity {
         loginBtn = (Button)findViewById(R.id.btnLogin);
         etUser = (EditText)findViewById(R.id.etUser);
         etPassword = (EditText)findViewById(R.id.etPassword);
-        //ImageView loadingGif = (ImageView)findViewById(R.id.ivLoadingGif);
-        //loadingGif.setBackgroundResource(R.drawable.loading_small);
-        //AnimationDrawable frameAnimation = (AnimationDrawable) loadingGif.getBackground();
-        //frameAnimation.start();
+        saveLoginCheckBox = (CheckBox)findViewById(R.id.saveLoginCheckBox);
+
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+        saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (saveLogin == true) {
+            saveLoginCheckBox.setChecked(true);
+        }
         btnPressed();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        updatePreferences();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadPreferences();
     }
 
     @Override
@@ -80,15 +110,23 @@ public class LoginActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void btnPressed() {
         loginBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
+                    updatePreferences();
                 if(etUser.getText().length() > 0 && etPassword.getText().length() > 0){
-                    dialog = ProgressDialog.show(LoginActivity.this, "",
-                            "Validating user...", true);
+
+//                    dialog = ProgressDialog.show(LoginActivity.this, "",
+//                            "Validating user...", true);
+                    dialog = new ProgressDialog(LoginActivity.this);
+                    dialog.setCancelable(true);
+                    dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    dialog.setIndeterminate(true);
+                    dialog.setIndeterminateDrawable(LoginActivity.this.getResources().getDrawable(R.drawable.loading_frames));
+                    dialog.show();
                     new Thread(new Runnable() {
                         public void run() {
                             logindb();
@@ -124,7 +162,7 @@ public class LoginActivity extends Activity {
                                                 Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                                             }
                                         });
-                                        startActivity(new Intent(LoginActivity.this, ITE_MainMenu.class));
+                                        startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
                                         finish();
                                     } else {
                                         showAlert();
@@ -141,9 +179,11 @@ public class LoginActivity extends Activity {
                         }
                     }, 2500);
                 }
+
                 else{
                     Toast.makeText(LoginActivity.this,"Please enter valid username and password", Toast.LENGTH_LONG).show();
                 }
+
             }
         });
     }
@@ -192,5 +232,43 @@ public class LoginActivity extends Activity {
 
     public static String[] GetValue(){
         return separated;
+    }
+
+    private void updatePreferences() {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        if (saveLoginCheckBox.isChecked()) {
+            // Edit and commit
+            UnameValue = etUser.getText().toString();
+            PasswordValue = etPassword.getText().toString();
+            System.out.println("onPause save name: " + UnameValue);
+            System.out.println("onPause save password: " + PasswordValue);
+            editor.putString(PREF_UNAME, UnameValue);
+            editor.putString(PREF_PASSWORD, PasswordValue);
+            editor.commit();
+            loginPrefsEditor.putBoolean("saveLogin", true);
+            loginPrefsEditor.commit();
+        } else {
+            editor.clear();
+            editor.commit();
+            loginPrefsEditor.putBoolean("saveLogin", false);
+            loginPrefsEditor.commit();
+        };
+    }
+
+    private void loadPreferences() {
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME,
+                Context.MODE_PRIVATE);
+
+        // Get value
+        UnameValue = settings.getString(PREF_UNAME, DefaultUnameValue);
+        PasswordValue = settings.getString(PREF_PASSWORD, DefaultPasswordValue);
+        etUser.setText(UnameValue);
+        etPassword.setText(PasswordValue);
+        System.out.println("onResume load name: " + UnameValue);
+        System.out.println("onResume load password: " + PasswordValue);
     }
 }

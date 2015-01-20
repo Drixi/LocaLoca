@@ -19,7 +19,7 @@
         android:background="#3acfcfcf"
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/etPassword" />
+        android:layout_below="@+id/saveLoginCheckBox" />
 
     <Button
         android:layout_width="fill_parent"
@@ -64,12 +64,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <ImageView
+    <CheckBox
+        android:id="@+id/saveLoginCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ivLoadingGif"
-        android:layout_below="@+id/btnforgot"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/etPassword"
+        android:text="Save Login?"
+        android:textColor="#FFF" />
 
 </RelativeLayout>

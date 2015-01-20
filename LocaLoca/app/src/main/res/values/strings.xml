@@ -7,6 +7,8 @@
     <string name="title_activity_main_window">MainWindow</string>
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigatuin Drawer</string>
+    <string name="build_version">Build v0.6.4.2</string>
+    <string name="menu_logo_aspect_ratio">1.769411764705882</string>
 
     <color name="App_BG">#ff000000</color>
     <color name="Btn_main">#7D7D7D</color>
@@ -14,8 +16,9 @@
     <color name="direct_mblue">#8ED7D6</color>
 
     <string-array name="drawerObjets">
+        <item >Home</item>
         <item >Map</item>
-        <item >Bookings</item>
+        <item >Book Room</item>
         <item >Calendar</item>
         <item >Settings</item>
         <item >About</item>
