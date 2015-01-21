@@ -59,12 +59,12 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     public static final String TAG = "NfcDemo";
     private NfcAdapter mNfcAdapter;
     public static String ReadResult = "";
-    public static int nfcisread = 0;
+    //public static int nfcisread = 0;
     private PendingIntent mPendingIntent;
-    public static List<NFCListener> nfcListeners = new ArrayList<NFCListener>();
-    private NFCListener nfcListener;
+    //public static List<NFCListener> nfcListeners = new ArrayList<NFCListener>();
+    //private NFCListener nfcListener;
 
-    public static void addNFCListener(NFCListener listener) {
+    /*public static void addNFCListener(NFCListener listener) {
         nfcListeners.add(listener);
     }
 
@@ -76,7 +76,7 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
     public void onDestroy() {
         super.onDestroy();
         removeNFCListener(nfcListener);
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,11 +120,11 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
         };
 
         mPendingIntent = PendingIntent.getActivity(
-                this, 0, new Intent(this, DrawerActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         handleIntent(getIntent());
 
-        nfcListener = new NFCListener() {
+        /*nfcListener = new NFCListener() {
             @Override
             public void NFCRead(String data) {
                 getActionBar().setTitle("Book Room");
@@ -133,7 +133,7 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
                 ft.replace(R.id.contentFrame, buttonBooking, "booking").commit();
             }
         };
-        addNFCListener(nfcListener);
+        addNFCListener(nfcListener);*/
     }
 
 
@@ -238,15 +238,23 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
+                getActionBar().setTitle("NFC Scanned");
+                nfcFragment nfcFragment = new nfcFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contentFrame, nfcFragment, "booking").commit();
                 ReadResult = result;
-                nfcisread = 1;
+                /*nfcisread = 1;
                 System.out.print(result);
 
                 for (NFCListener listener : nfcListeners) {
                     listener.NFCRead(result);
-                }
+                }*/
             }
         }
+    }
+
+    public static String NFCRead(){
+        return ReadResult;
     }
 
 

@@ -20,7 +20,8 @@
         <activity
             android:theme="@style/Theme.AppCompat"
             android:name=".DrawerActivity"
-            android:label="Drawer">
+            android:label="Drawer"
+            android:launchMode="singleTask">
 
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
