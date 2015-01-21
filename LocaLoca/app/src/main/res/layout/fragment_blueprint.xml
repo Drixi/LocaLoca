@@ -8,11 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/first_floor">
+        android:src="@drawable/frkj12_3">
         </ImageView>
 
 </RelativeLayout>

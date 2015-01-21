@@ -103,15 +103,14 @@ public class nfcFragment extends Fragment {
             }
         });
 
-        /*// Top right button
         btnSeeOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonCalendar = new CalenderFragment();
+                MapFragment MapFragment = new MapFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.contentFrame, buttonCalendar).commit();
+                ft.replace(R.id.contentFrame, MapFragment).commit();
             }
-        });*/
+        });
         return rootView;
     }
 }
