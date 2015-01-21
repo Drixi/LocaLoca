@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,7 +51,7 @@ public class BookingFragmentNFC extends Fragment{
 
     HttpPost httppost;
     StringBuffer buffer;
-    String response, oldbuilding, oldfloor, oldroom;
+    String response, oldbuilding, oldfloor, oldroom, buildingString;
     HttpClient httpclient;
     List<NameValuePair> nameValuePairs;
     ProgressDialog dialog = null;
@@ -72,11 +73,27 @@ public class BookingFragmentNFC extends Fragment{
     String[] TimeChoicesEndString;
     SharedPreferences oldbooking;
     boolean buildingchanged;
+    DrawerActivity DrawerActivity = new DrawerActivity();
+    String[] tempnfc = DrawerActivity.NFCRead().split("#");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_bookingnfc, container, false);
+
+        int building = Integer.valueOf(tempnfc[1]);
+        switch (building){
+            case 1: buildingString = "A.C. Meyers Vænge 15";
+                break;
+            case 2: buildingString = "Frederikskaj 6";
+                break;
+            case 3: buildingString = "Frederikskaj 10A";
+                break;
+            case 4: buildingString = "Frederikskaj 10B";
+                break;
+            case 5: buildingString = "Frederikskaj 12";
+                break;
+        }
 
         SharedPreferences pref = getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         usernr = pref.getString("userNumber", "");
@@ -85,44 +102,53 @@ public class BookingFragmentNFC extends Fragment{
         btnCheckDate = (Button) rootView.findViewById(R.id.btnCheckDate);
         btnBookingSeeRoomOnMap = (Button)rootView.findViewById(R.id.btnBookingSeeOnMap);
         tvBookBuilding = (TextView) rootView.findViewById(R.id.tvBookBuilding);
-        tvBookFloor = (TextView) rootView.findViewById(R.id.tvBookFloor);
-        tvBookRoom = (TextView) rootView.findViewById(R.id.tvBookRoom);
+        //tvBookFloor = (TextView) rootView.findViewById(R.id.tvBookFloor);
+        //tvBookRoom = (TextView) rootView.findViewById(R.id.tvBookRoom);
         tvBookDate = (TextView) rootView.findViewById(R.id.tvBookDate);
         tvBookTimeStart = (TextView) rootView.findViewById(R.id.tvBookTimeStart);
         tvBookTimeEnd = (TextView) rootView.findViewById(R.id.tvBookTimeEnd);
-        sBuilding = (Spinner) rootView.findViewById(R.id.sBuilding);
-        sFloor = (Spinner) rootView.findViewById(R.id.sFloor);
-        sRoom = (Spinner) rootView.findViewById(R.id.sRoom);
+        //sBuilding = (Spinner) rootView.findViewById(R.id.sBuilding);
+        //sFloor = (Spinner) rootView.findViewById(R.id.sFloor);
+        //sRoom = (Spinner) rootView.findViewById(R.id.sRoom);
         sTimeStart = (Spinner) rootView.findViewById(R.id.sTimeStart);
         sTimeEnd = (Spinner) rootView.findViewById(R.id.sTimeEnd);
         dpBookDate = (DatePicker) rootView.findViewById(R.id.dpBookDate);
         btnSubmitBooking = (Button) rootView.findViewById(R.id.btnSubmitBooking);
         etTitle = (EditText) rootView.findViewById(R.id.etTitle);
         etDescription = (EditText) rootView.findViewById(R.id.etDescription);
-        tvBookBuilding.setVisibility(View.GONE);
-        tvBookFloor.setVisibility(View.GONE);
-        btnBookingSeeRoomOnMap.setVisibility(View.INVISIBLE);
-        tvBookRoom.setVisibility(View.INVISIBLE);
-        tvBookDate.setVisibility(View.INVISIBLE);
+        //tvBookBuilding.setVisibility(View.GONE);
+        //tvBookFloor.setVisibility(View.GONE);
+        //btnBookingSeeRoomOnMap.setVisibility(View.INVISIBLE);
+        //tvBookRoom.setVisibility(View.INVISIBLE);
+        //tvBookDate.setVisibility(View.INVISIBLE);
         tvBookTimeStart.setVisibility(View.INVISIBLE);
         tvBookTimeEnd.setVisibility(View.INVISIBLE);
-        sFloor.setVisibility(View.INVISIBLE);
-        sRoom.setVisibility(View.INVISIBLE);
+        //sFloor.setVisibility(View.INVISIBLE);
+        //sRoom.setVisibility(View.INVISIBLE);
         sTimeStart.setVisibility(View.INVISIBLE);
         sTimeEnd.setVisibility(View.INVISIBLE);
-        dpBookDate.setVisibility(View.INVISIBLE);
+        //dpBookDate.setVisibility(View.INVISIBLE);
         btnSubmitBooking.setVisibility(View.INVISIBLE);
         etTitle.setVisibility(View.INVISIBLE);
         etDescription.setVisibility(View.INVISIBLE);
-        btnCheckDate.setVisibility(View.INVISIBLE);
+       // btnCheckDate.setVisibility(View.INVISIBLE);
 
-        arrayadapter(buildingList, sBuilding);
-        arrayadapter(FloorList, sFloor);
+        String sourceString =
+                "<b>" + "Building:" + "</b><br> " + buildingString + "<br><br>" +
+                        "<b>" + "Floor:" + "</b><br> " + tempnfc[2] + "<br><br>" +
+                        "<b>" + "Room:" + "</b><br> " + tempnfc[3] + "<br>";
+
+        tvBookBuilding.setText(Html.fromHtml(sourceString));
+        //tvBookFloor.setText("Floor: " + tempnfc[2]);
+        //tvBookRoom.setText("Room: " + tempnfc[3]);
+
+        //arrayadapter(buildingList, sBuilding);
+        //arrayadapter(FloorList, sFloor);
 
         btnCheckDateClick();
-        sBuildingClick();
-        sFloorClick();
-        sRoomClick();
+        //sBuildingClick();
+        //sFloorClick();
+        //sRoomClick();
         sTimeStartClick();
         sTimeEndClick();
         btnSubmitCLick();
@@ -292,12 +318,28 @@ public class BookingFragmentNFC extends Fragment{
                         }
                         if (separated[1].equals("Fail") != true) {
                             String userDate;
-                            if(dpBookDate.getDayOfMonth() < 10){
+                            /*if(dpBookDate.getDayOfMonth() < 10){
                                 userDate = String.valueOf("0"+dpBookDate.getDayOfMonth()) + "/" +
                                         String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
                             } else {
                                 userDate = String.valueOf(dpBookDate.getDayOfMonth()) + "/" +
                                         String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
+                            }*/
+                            if(dpBookDate.getDayOfMonth() < 10 && dpBookDate.getMonth() < 10){
+                                userDate = String.valueOf("0" + dpBookDate.getDayOfMonth())+"/0"+
+                                        String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+                            }
+                            else if(dpBookDate.getDayOfMonth() < 10){
+                                userDate = String.valueOf("0" + dpBookDate.getDayOfMonth())+"/"+
+                                        String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+                            }
+                            else if(dpBookDate.getMonth() < 10){
+                                userDate = String.valueOf(dpBookDate.getDayOfMonth())+"/0"+
+                                        String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+                            }
+                            else {
+                                userDate = String.valueOf(dpBookDate.getDayOfMonth())+"/"+
+                                        String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
                             }
                             for (int j = 1; separated.length > j; j++) {
                                 String serverDate = matrix[j][4];
@@ -395,12 +437,29 @@ public class BookingFragmentNFC extends Fragment{
                                 int serverTimeStart = Integer.valueOf(matrix[i][2].replaceAll(":.*", ""));
                                 int serverTimeEnd = Integer.valueOf(matrix[i][3].replaceAll(":.*", ""));
                                 String userDate;
-                                if (dpBookDate.getDayOfMonth() < 10) {
+                                /*if (dpBookDate.getDayOfMonth() < 10) {
                                     userDate = String.valueOf("0" + dpBookDate.getDayOfMonth()) + "/" +
                                             String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
                                 } else {
                                     userDate = String.valueOf(dpBookDate.getDayOfMonth()) + "/" +
                                             String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear());
+                                }*/
+
+                                if(dpBookDate.getDayOfMonth() < 10 && dpBookDate.getMonth() < 10){
+                                    userDate = String.valueOf("0" + dpBookDate.getDayOfMonth())+"/0"+
+                                            String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+                                }
+                                else if(dpBookDate.getDayOfMonth() < 10){
+                                    userDate = String.valueOf("0" + dpBookDate.getDayOfMonth())+"/"+
+                                            String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+                                }
+                                else if(dpBookDate.getMonth() < 10){
+                                    userDate = String.valueOf(dpBookDate.getDayOfMonth())+"/0"+
+                                            String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
+                                }
+                                else {
+                                    userDate = String.valueOf(dpBookDate.getDayOfMonth())+"/"+
+                                            String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
                                 }
 
                                 String serverDate = matrix[i][4];
@@ -441,14 +500,14 @@ public class BookingFragmentNFC extends Fragment{
                     Toast.makeText(getActivity(), "Starting time cannot be before ending time", Toast.LENGTH_SHORT).show();
                     btnSubmitBooking.setEnabled(true);
                 } else {
-                    if (TextUtils.isEmpty(stretTitle) || TextUtils.isEmpty(stretDescription) || RoomChosen.equals("")) {
-                        Toast.makeText(getActivity(), "Room, Title or Description is missing", Toast.LENGTH_SHORT).show();
+                    if (TextUtils.isEmpty(stretTitle) || TextUtils.isEmpty(stretDescription)) {
+                        Toast.makeText(getActivity(), "Title or Description is missing", Toast.LENGTH_SHORT).show();
                         btnSubmitBooking.setEnabled(true);
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setMessage("Title: " + etTitle.getText().toString() + "\nDescription: " +
-                                etDescription.getText().toString() + "\nBuilding: " + BuildingChosen + "\nFloor: " + FloorChosen
-                                + "\nRoom: " + RoomChosen + "\nDate: " + String.valueOf(dpBookDate.getDayOfMonth()) + "/" +
+                                etDescription.getText().toString() + "\nBuilding: " + buildingString + "\nFloor: " + tempnfc[2]
+                                + "\nRoom: " + tempnfc[3] + "\nDate: " + String.valueOf(dpBookDate.getDayOfMonth()) + "/" +
                                 String.valueOf(dpBookDate.getMonth() + 1) + "/" + String.valueOf(dpBookDate.getYear()) + "\nTime: "
                                 + TimeStartChosen + "-" + TimeEndChosen)
                                 .setCancelable(false)
@@ -512,6 +571,7 @@ public class BookingFragmentNFC extends Fragment{
 
     public void getRooms(){
         try{
+
             httpclient=new DefaultHttpClient();
             httppost= new HttpPost("http://pomsen.com/phpscripts/getroomsPOST.php");
             nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -542,8 +602,8 @@ public class BookingFragmentNFC extends Fragment{
             String date;
             /*String roomid = buildingID + "." +
                     floorID + "." + RoomChosen.toString().replaceAll(" .*", "");*/
-            String roomid = buildingID + "." +
-                    floorID + "." + RoomChosen.toString();
+            String roomid = tempnfc[1] + "." +
+                    tempnfc[2] + "." + tempnfc[3];
             if(dpBookDate.getDayOfMonth() < 10 && dpBookDate.getMonth() < 10){
                 date = String.valueOf("0" + dpBookDate.getDayOfMonth())+"/0"+
                         String.valueOf(dpBookDate.getMonth()+1)+"/"+String.valueOf(dpBookDate.getYear());
@@ -601,8 +661,8 @@ public class BookingFragmentNFC extends Fragment{
             nameValuePairs = new ArrayList<NameValuePair>(1);
             /*String roomid = buildingID + "." +
                     floorID + "." + RoomChosen.toString().replaceAll(" .*", "");*/
-            String roomid = buildingID + "." +
-                    floorID + "." + RoomChosen.toString();
+            String roomid = tempnfc[1] + "." +
+                    tempnfc[2] + "." + tempnfc[3];
             nameValuePairs.add(new BasicNameValuePair("roomid", roomid));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             ResponseHandler<String> responseHandler = new BasicResponseHandler();

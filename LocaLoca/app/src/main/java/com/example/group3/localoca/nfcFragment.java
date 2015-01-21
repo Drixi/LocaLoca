@@ -89,9 +89,9 @@ public class nfcFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                BookingFragment BookingFragment = new BookingFragment();
+                BookingFragmentNFC BookingFragmentNFC = new BookingFragmentNFC();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.contentFrame, BookingFragment, "booking").commit();
+                ft.replace(R.id.contentFrame, BookingFragmentNFC, "booking").commit();
             }
         });
 

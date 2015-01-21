@@ -29,7 +29,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Book a room"
-                    android:id="@+id/tvBookTitle" />
+                    android:id="@+id/tvBookTitle"
+                    android:layout_gravity="center_horizontal" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -37,36 +38,6 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Choose building"
                     android:id="@+id/tvBookBuilding" />
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/sBuilding"
-                    android:layout_gravity="center_horizontal" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Choose Floor"
-                    android:id="@+id/tvBookFloor" />
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/sFloor" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Choose Room"
-                    android:id="@+id/tvBookRoom" />
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/sRoom" />
 
                 <Button
                     android:layout_width="match_parent"
