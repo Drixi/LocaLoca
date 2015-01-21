@@ -99,14 +99,14 @@ public class DrawerActivity extends ActionBarActivity implements AdapterView.OnI
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        /*drawerLayout.openDrawer(Gravity.START);
+        drawerLayout.openDrawer(Gravity.START);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 drawerLayout.closeDrawer(Gravity.START);
             }
-        }, 1500);*/
+        }, 1500);
 
         drawerListener= new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer,
                 R.string.drawer_open, R.string.drawer_close ){
