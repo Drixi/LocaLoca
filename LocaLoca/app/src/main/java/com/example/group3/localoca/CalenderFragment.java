@@ -75,6 +75,8 @@ public class CalenderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_calender, container, false);
 
+        getActivity().getActionBar().setTitle("Calender");
+
         SharedPreferences pref = getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         usernr = pref.getString("userNumber", "");
         username = pref.getString("userName", "");

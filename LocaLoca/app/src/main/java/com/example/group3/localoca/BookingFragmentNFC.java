@@ -76,7 +76,7 @@ public class BookingFragmentNFC extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_bookingNFC, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_bookingnfc, container, false);
 
         SharedPreferences pref = getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         usernr = pref.getString("userNumber", "");

@@ -17,6 +17,7 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_blueprint, container, false);
+        getActivity().getActionBar().setTitle("Map");
 
         img_first_floor = (ImageView) rootView.findViewById(R.id.imageEnhance);
         new PhotoViewAttacher(img_first_floor);

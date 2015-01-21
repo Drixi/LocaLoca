@@ -80,6 +80,8 @@ public class BookingFragment extends Fragment{
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_booking, container, false);
 
+        getActivity().getActionBar().setTitle("Booking");
+
         SharedPreferences pref = getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         usernr = pref.getString("userNumber", "");
         username = pref.getString("userName", "");
