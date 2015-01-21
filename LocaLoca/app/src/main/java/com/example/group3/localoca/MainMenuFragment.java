@@ -38,6 +38,7 @@ public class MainMenuFragment extends Fragment {
         btn_main_4 = (Button) rootView.findViewById(R.id.btn_main4);
         logo = (ImageView) rootView.findViewById(R.id.img_menu_logo);
         hideKeyboard();
+        getActivity().getActionBar().setTitle("Main Menu");
 
         // Bottom left button
         btn_main_1.setOnClickListener(new View.OnClickListener() {
