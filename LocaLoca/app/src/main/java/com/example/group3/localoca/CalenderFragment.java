@@ -276,9 +276,13 @@ public class CalenderFragment extends Fragment {
         btnFindRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(getActivity(), "This feature is currently disabled", Toast.LENGTH_LONG);
+                MapFragment MapFragment = new MapFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contentFrame, MapFragment).commit();
+
+                /*Toast toast = Toast.makeText(getActivity(), "This feature is currently disabled", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
-                toast.show();
+                toast.show();*/
             }
         });
 
